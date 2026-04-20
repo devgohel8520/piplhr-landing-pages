@@ -924,3 +924,19 @@ a {
         grid-template-columns: 1fr;
     }
 }
+
+@media (max-width: 768px) {
+    .hero-content, .hero-title, .hero-subtitle, .hero-buttons {
+        text-align: center !important;
+    }
+    .hero-buttons {
+        justify-content: center !important;
+    }
+    .hero-visual {
+        margin-top: 32px;
+    }
+    .hero .container {
+        display: flex !important;
+        flex-direction: column;
+    }
+}
