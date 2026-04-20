@@ -271,7 +271,7 @@ a {
     content: '';
     position: absolute;
     inset: -20px;
-    background-image: linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
     background-size: 40px 40px;
     border-radius: 40px;
     pointer-events: none;
@@ -309,9 +309,17 @@ a {
     background: var(--border);
 }
 
-.mock-dots span:nth-child(1) { background: #EF4444; }
-.mock-dots span:nth-child(2) { background: #F59E0B; }
-.mock-dots span:nth-child(3) { background: #22C55E; }
+.mock-dots span:nth-child(1) {
+    background: #EF4444;
+}
+
+.mock-dots span:nth-child(2) {
+    background: #F59E0B;
+}
+
+.mock-dots span:nth-child(3) {
+    background: #22C55E;
+}
 
 .mock-title {
     font-size: 13px;
@@ -424,7 +432,7 @@ a {
     height: 8px;
     border: solid white;
     border-width: 0 1.5px 1.5px 0;
-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 .mock-task {
@@ -527,9 +535,11 @@ transform: rotate(45deg);
 }
 
 .features-grid {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 .feature-card {
@@ -539,6 +549,7 @@ transform: rotate(45deg);
     border: 1px solid var(--border);
     text-align: center;
     transition: all 0.3s ease;
+    flex: 1;
 }
 
 .feature-card:hover {
@@ -754,7 +765,7 @@ transform: rotate(45deg);
     content: '';
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
     background-size: 40px 40px;
 }
 
