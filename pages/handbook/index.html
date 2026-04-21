@@ -8,176 +8,7 @@
     <link rel="stylesheet" href="../../style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-    <style>
-        body {
-            background: #fff;
-            color: #111;
-        }
-
-        .hero {
-            background: #fff;
-        }
-
-        .hero-title {
-            color: #111;
-        }
-
-        .hero-subtitle {
-            color: #555;
-        }
-
-        .section-title {
-            color: #111;
-        }
-
-        .handbook-mock {
-            background: #fff;
-            border: 1px solid #e5e7eb;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
-        }
-
-        .handbook-mock .mock-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 20px;
-            background: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .handbook-mock .mock-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .handbook-mock .mock-dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #e5e7eb;
-        }
-
-        .handbook-mock .mock-dots span:nth-child(1) {
-            background: #ef4444;
-        }
-
-        .handbook-mock .mock-dots span:nth-child(2) {
-            background: #f59e0b;
-        }
-
-        .handbook-mock .mock-dots span:nth-child(3) {
-            background: #22c55e;
-        }
-
-        .handbook-mock .mock-title {
-            font-size: 13px;
-            font-weight: 500;
-            color: #6b7280;
-            margin-left: auto;
-        }
-
-        .handbook-mock .mock-body {
-            padding: 20px;
-        }
-
-        .handbook-card {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .handbook-card-header {
-            padding: 12px 16px;
-            background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%);
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .handbook-card-body {
-            padding: 16px;
-        }
-
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            font-size: 13px;
-            color: #374151;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .checklist-item:last-child {
-            border-bottom: none;
-        }
-
-        .check {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #d1d5db;
-            border-radius: 4px;
-            display: inline-block;
-        }
-
-        .check.checked {
-            background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%);
-            border-color: transparent;
-            position: relative;
-        }
-
-        .check.checked::after {
-            content: '✓';
-            position: absolute;
-            color: white;
-            font-size: 11px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .handbook-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .stat-box {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 16px;
-            text-align: center;
-        }
-
-        .stat-box .stat-num {
-            display: block;
-            font-size: 24px;
-            font-weight: 700;
-            color: #7C3AED;
-        }
-
-        .stat-box .stat-label {
-            font-size: 11px;
-            color: #6b7280;
-        }
-
-        @media (max-width: 768px) {
-            .hero .container {
-                grid-template-columns: 1fr !important;
-            }
-
-            .hero-visual {
-                order: -1;
-                margin-bottom: 24px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
 </head>
 
 <body>
@@ -190,76 +21,73 @@
                 <span></span>
             </button>
             <div class="nav-links">
-                <a href="#problem">Why HR</a>
                 <a href="#solution">Solution</a>
                 <a href="#how-it-works">How It Works</a>
                 <a href="#use-cases">Use Cases</a>
             </div>
             <div class="nav-cta">
-                <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true" class="btn btn-outline">Book
-                    Demo</a>
-                <a href="https://app.piplhr.com/signup" class="btn btn-primary">Start Free</a>
+                <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true" class="btn btn-primary">Book Demo</a>
             </div>
         </nav>
     </header>
 
     <main>
-        <section class="hero" style="padding-bottom: 40px;">
-            <div class="container" style="max-width: 1152px;">
-                <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                    <h1 class="hero-title" style="font-size: 2.75rem; line-height: 1.15; text-align: left;">Stop <span
-                            style="background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Answering
-                            Same Questions Daily.</span><br>Start Running Company with <span
-                            style="background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">One
-                            Handbook.</span></h1>
-                    <p class="hero-subtitle"
-                        style="font-size: 1.125rem; margin-bottom: 12px; margin-top: 16px; text-align: left;">Your
-                        entire company — policies, roles, processes, and training — organized in one powerful system.
+        <section class="hero">
+            <div class="container hero-grid">
+                <div>
+                    <div class="hero-badge">
+                        <span class="hero-badge-text">Company Handbook</span>
+                    </div>
+                    <h1 class="hero-title">
+                        Stop Answering <span class="highlight">Same Questions.</span><br>
+                        Start Running with <span class="highlight">One Handbook.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Your entire company — policies, roles, processes, and training — organized in one powerful system.
                     </p>
-                    <p class="hero-subtitle" style="font-size: 1.125rem; margin-bottom: 24px; text-align: left;">
-                        <strong>Make HR the most
-                            impactful role in the organization.</strong>
+                    <p class="hero-gujarati">
+                        "દરેક employee ને વારંવાર સમજાવવાનો સમય પૂરો — હવે Handbook જ સમજાવશે."
                     </p>
-                    <p class="hero-subtitle"
-                        style="font-size: 1.125rem; margin-bottom: 12px; margin-top: 16px; text-align: left;">They
-                        are real hero in the making.</p>
-                    <div class="hero-buttons" style="flex-wrap: wrap; gap: 12px; justify-content: flex-start;">
-                        <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true"
-                            class="btn btn-primary btn-lg">Book a Free Demo</a>
-                        <a href="#handbook-demo" class="btn btn-outline btn-lg">See Handbook in Action</a>
+                    <div class="hero-buttons">
+                        <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true" class="btn btn-primary btn-xl">Book Demo</a>
+                        <a href="#solution" class="btn btn-outline btn-lg">See in Action</a>
                     </div>
                 </div>
-                <div style="text-align: center; margin-top: 48px;">
-                    <div class="handbook-mock" style="max-width: 500px; margin: 0 auto;">
+                <div class="hero-visual">
+                    <div class="mock-ui">
                         <div class="mock-header">
                             <div class="mock-dots"><span></span><span></span><span></span></div>
                             <span class="mock-title">Piplhr Handbook</span>
                         </div>
-                        <div class="mock-body">
-                            <div class="handbook-card">
-                                <div class="handbook-card-header">📋 HR Onboarding Checklist</div>
-                                <div class="handbook-card-body">
-                                    <div class="checklist-item"><span class="check checked"></span><span>Welcome email &
-                                            letter</span></div>
-                                    <div class="checklist-item"><span class="check checked"></span><span>ID card &
-                                            access cards</span></div>
-                                    <div class="checklist-item"><span class="check checked"></span><span>System & email
-                                            setup</span></div>
-                                    <div class="checklist-item"><span class="check checked"></span><span>Introduction to
-                                            team</span></div>
-                                    <div class="checklist-item"><span class="check"></span><span>Role &
-                                            responsibilities</span></div>
-                                    <div class="checklist-item"><span class="check"></span><span>Training
-                                            schedule</span></div>
-                                    <div class="checklist-item"><span class="check"></span><span>First week goals</span>
-                                    </div>
+                        <div class="mock-content">
+                            <div class="mock-stats">
+                                <div class="mock-stat">
+                                    <div class="mock-stat-value">7</div>
+                                    <div class="mock-stat-label">Days to Ready</div>
+                                </div>
+                                <div class="mock-stat-outline">
+                                    <div class="mock-stat-value">12</div>
+                                    <div class="mock-stat-label">Documents</div>
+                                </div>
+                                <div class="mock-stat-outline">
+                                    <div class="mock-stat-value">100%</div>
+                                    <div class="mock-stat-label">Team Clarity</div>
                                 </div>
                             </div>
-                            <div class="handbook-stats">
-                                <div class="stat-box"><span class="stat-num">7</span><span class="stat-label">Days to
-                                        Ready</span></div>
-                                <div class="stat-box"><span class="stat-num">12</span><span
-                                        class="stat-label">Documents</span></div>
+                            <div class="mock-activity">
+                                <div class="mock-activity-title">HR Onboarding Checklist</div>
+                                <div class="mock-activity-item">
+                                    <div class="mock-activity-dot"></div>
+                                    <span class="mock-activity-text">Welcome email & letter</span>
+                                </div>
+                                <div class="mock-activity-item">
+                                    <div class="mock-activity-dot"></div>
+                                    <span class="mock-activity-text">System & email setup</span>
+                                </div>
+                                <div class="mock-activity-item">
+                                    <div class="mock-activity-dot warning"></div>
+                                    <span class="mock-activity-text">Training schedule</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -267,90 +95,77 @@
             </div>
         </section>
 
-        <section class="problem" id="problem">
+        <section class="problem">
             <div class="container">
                 <h2 class="section-title">HR Today = Firefighting, Not Leadership</h2>
                 <div class="problem-grid">
-                    <div class="problem-card fade-in">
+                    <div class="problem-card">
                         <div class="problem-icon">❓</div>
                         <h3>Same Questions Daily</h3>
-                        <p>Employees asking same questions again and again.</p>
+                        <p>Employees asking same questions again</p>
                     </div>
-                    <div class="problem-card fade-in">
+                    <div class="problem-card">
                         <div class="problem-icon">📋</div>
                         <h3>No Policy Clarity</h3>
-                        <p>No clarity in policies and rules across company.</p>
+                        <p>No clarity in policies</p>
                     </div>
-                    <div class="problem-card fade-in">
+                    <div class="problem-card">
                         <div class="problem-icon">👥</div>
                         <h3>Training Depends on People</h3>
-                        <p>Training depends on people, not system.</p>
+                        <p>Training relies on individuals</p>
                     </div>
-                    <div class="problem-card fade-in">
+                    <div class="problem-card">
                         <div class="problem-icon">🐢</div>
                         <h3>Slow Onboarding</h3>
-                        <p>New hires take weeks to understand work.</p>
-                    </div>
-                    <div class="problem-card fade-in">
-                        <div class="problem-icon">⚡</div>
-                        <h3>Stuck in Coordination</h3>
-                        <p>HR stuck in daily coordination instead of strategy.</p>
+                        <p>Weeks to understand work</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="solution" id="solution">
+        <section class="solution">
             <div class="container">
                 <h2 class="section-title">One Handbook. Total Clarity.</h2>
-                <p class="section-desc" style="text-align: center; margin: 0 auto 48px; max-width: 560px;">Piplhr
-                    Handbook centralizes everything your company runs on: Policies, Processes, Roles, Training, SOPs —
-                    all in one place.</p>
                 <div class="solution-grid">
-                    <div class="solution-card fade-in">
+                    <div class="solution-card">
+                        <div class="solution-icon">🏢</div>
                         <h3>Company Info Book</h3>
-                        <p>Everything about your company — history, vision, mission in one place.</p>
+                        <p>Everything about your company — history, vision, mission in one place</p>
                     </div>
-                    <div class="solution-card fade-in">
+                    <div class="solution-card">
+                        <div class="solution-icon">📜</div>
                         <h3>Policy Book</h3>
-                        <p>All HR policies, leave rules, attendance, benefits — clearly documented.</p>
+                        <p>All HR policies, leave rules, attendance, benefits — clearly documented</p>
                     </div>
-                    <div class="solution-card fade-in">
+                    <div class="solution-card">
+                        <div class="solution-icon">⚙️</div>
                         <h3>Process Book</h3>
-                        <p>Standard operating procedures for every department and role.</p>
-                    </div>
-                    <div class="solution-card fade-in">
-                        <h3>Role-wise Clarity</h3>
-                        <p>Every employee knows exactly what they own and deliver.</p>
+                        <p>Standard operating procedures for every department and role</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="how-it-works" id="how-it-works">
+        <section class="features" id="how-it-works">
             <div class="container">
                 <h2 class="section-title">From Chaos to Clarity in 3 Steps</h2>
-                <div class="steps">
-                    <div class="step fade-in">
+                <div class="steps-grid">
+                    <div class="step">
                         <div class="step-number">1</div>
                         <h3>Document Structure</h3>
-                        <p>Document your company structure, policies, and processes.</p>
+                        <p>Document your company structure, policies, and processes</p>
                     </div>
-                    <div class="step-connector"></div>
-                    <div class="step fade-in">
+                    <div class="step">
                         <div class="step-number">2</div>
                         <h3>Define & Organize</h3>
-                        <p>Define policies, roles & processes in structured format.</p>
+                        <p>Define policies, roles & processes in structured format</p>
                     </div>
-                    <div class="step-connector"></div>
-                    <div class="step fade-in">
+                    <div class="step">
                         <div class="step-number">3</div>
                         <h3>Share with Team</h3>
-                        <p>Share with team — everyone works with clarity.</p>
+                        <p>Share with team — everyone works with clarity</p>
                     </div>
                 </div>
-                <p style="text-align: center; margin-top: 24px; color: #666; font-size: 14px;">No Excel. No scattered
-                    Docs. Everything structured.</p>
             </div>
         </section>
 
@@ -358,67 +173,55 @@
             <div class="container">
                 <h2 class="section-title">Become the HR Every Company Needs</h2>
                 <div class="benefits-grid">
-                    <div class="benefit-card fade-in">
-                        <span class="benefit-stat">🛠️</span>
+                    <div class="benefit-card">
+                        <div class="benefit-stat">🛠️</div>
                         <h3>System Builder</h3>
-                        <p>HR becomes system builder, not task handler.</p>
                     </div>
-                    <div class="benefit-card fade-in">
-                        <span class="benefit-stat">🧠</span>
+                    <div class="benefit-card">
+                        <div class="benefit-stat">🧠</div>
                         <h3>No Dependency</h3>
-                        <p>No dependency on memory or people.</p>
                     </div>
-                    <div class="benefit-card fade-in">
-                        <span class="benefit-stat">⚡</span>
+                    <div class="benefit-card">
+                        <div class="benefit-stat">⚡</div>
                         <h3>Instant Training</h3>
-                        <p>Training becomes instant and standardized.</p>
                     </div>
-                    <div class="benefit-card fade-in">
-                        <span class="benefit-stat">🤝</span>
+                    <div class="benefit-card">
+                        <div class="benefit-stat">🤝</div>
                         <h3>Management Trust</h3>
-                        <p>Management trusts HR more.</p>
                     </div>
                 </div>
-                <p style="text-align: center; margin-top: 32px; font-size: 18px; font-weight: 600;">"HR હવે support role
-                    નથી — હવે system builder છે."</p>
+                <p class="hero-gujarati" style="text-align: center; max-width: 600px; margin: 40px auto 0;">"HR હવે support role નથી — હવે system builder છે."</p>
             </div>
         </section>
 
-        <section class="use-cases" id="use-cases">
+        <section class="use-cases" id="use-cases" style="background: var(--bg-gray);">
             <div class="container">
                 <h2 class="section-title">Built for Growing Companies</h2>
-                <div class="use-cases-grid">
-                    <div class="use-case-card fade-in">
-                        <h3>🏭 Manufacturing</h3>
-                        <ul>
-                            <li>Production teams</li>
-                            <li>Quality control</li>
-                            <li>Safety procedures</li>
-                        </ul>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏭</div>
+                        <h3>Manufacturing</h3>
+                        <p>Production teams, quality control</p>
                     </div>
-                    <div class="use-case-card fade-in">
-                        <h3>📦 Trading</h3>
-                        <ul>
-                            <li>Sales teams</li>
-                            <li>Inventory management</li>
-                            <li>Customer service</li>
-                        </ul>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>Trading</h3>
+                        <p>Sales teams, inventory</p>
                     </div>
-                    <div class="use-case-card fade-in">
-                        <h3>💼 Service</h3>
-                        <ul>
-                            <li>Client handling</li>
-                            <li>Project delivery</li>
-                            <li>Support teams</li>
-                        </ul>
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <h3>Service</h3>
+                        <p>Client handling, delivery</p>
                     </div>
-                    <div class="use-case-card fade-in">
-                        <h3>🚀 Startups</h3>
-                        <ul>
-                            <li>Scaling 10 to 100</li>
-                            <li>Onboarding</li>
-                            <li>Culture building</li>
-                        </ul>
+                    <div class="feature-card">
+                        <div class="feature-icon">🚀</div>
+                        <h3>Startups</h3>
+                        <p>Scaling 10 to 100</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3>Growth</h3>
+                        <p>Culture building</p>
                     </div>
                 </div>
             </div>
@@ -426,24 +229,13 @@
 
         <section class="social-proof">
             <div class="container">
-                <h2 class="section-title">What You Unlock with Handbook</h2>
-                <div class="problem-grid">
-                    <div class="problem-card fade-in">
-                        <h3>⚡ Faster Onboarding</h3>
-                        <p>3 weeks → 3 days</p>
-                    </div>
-                    <div class="problem-card fade-in">
-                        <h3>💬 Clear Communication</h3>
-                        <p>Everyone knows what to do</p>
-                    </div>
-                    <div class="problem-card fade-in">
-                        <h3>🔗 Reduced Dependency</h3>
-                        <p>No dependence on individuals</p>
-                    </div>
-                    <div class="problem-card fade-in">
-                        <h3>📊 Better Accountability</h3>
-                        <p>Clear roles and ownership</p>
-                    </div>
+                <p class="social-proof-text">Companies Systemizing with Piplhr</p>
+                <div class="logos">
+                    <div class="logo-placeholder">Spinz9</div>
+                    <div class="logo-placeholder">Hem Packaging</div>
+                    <div class="logo-placeholder">Roxo Sanitaryware</div>
+                    <div class="logo-placeholder">Opec Ceramic</div>
+                    <div class="logo-placeholder">Novanext Energies</div>
                 </div>
             </div>
         </section>
@@ -451,10 +243,10 @@
         <section class="cta">
             <div class="container">
                 <h2 class="cta-title">Don't Let HR Stay Busy. Make HR Powerful.</h2>
-                <p class="cta-subtitle">Start building your company handbook today.</p>
-                <div class="hero-buttons" style="justify-content: center;">
-                    <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true"
-                        class="btn btn-primary btn-lg">Book a Free Demo</a>
+                <p class="cta-subtitle">Start building your company handbook today</p>
+                <div class="cta-buttons">
+                    <a href="https://cal.id/juhi.dhruv/piplhr-support?overlayCalendar=true" class="btn btn-primary btn-xl">Book Demo</a>
+                    <a href="https://app.piplhr.com/signup" class="btn btn-outline btn-lg">Start Free</a>
                 </div>
             </div>
         </section>
@@ -462,17 +254,19 @@
 
     <footer class="footer">
         <div class="container">
-            <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 16px;">
+            <div>
                 <a href="index.html">Handbook</a>
                 <a href="../hr/index.html">HR Docs</a>
                 <a href="../hr-leaders/index.html">HR Leaders</a>
                 <a href="../hr-manager/index.html">HR Manager</a>
                 <a href="../ai-power/index.html">AI</a>
                 <a href="../leaders/index.html">Leaders</a>
+                <a href="../gujarati/index.html">Gujarati</a>
             </div>
             <p>&copy; 2026 Piplhr. All rights reserved.</p>
         </div>
     </footer>
+
     <script src="../../script.js"></script>
 </body>
 
