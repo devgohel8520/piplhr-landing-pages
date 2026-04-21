@@ -38,7 +38,7 @@
 
     <main>
         <section class="hero" style="padding: 80px 0; background: #fafafa;">
-            <div class="container" style="max-width: 1100px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+            <div class="container hero-grid" style="max-width: 1100px;">
                 <div>
                     <div style="display: inline-block; background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.875rem; font-weight: 600; margin-bottom: 24px;">🚀 For HR Managers</div>
                     <h1 class="hero-title" style="font-size: 2.5rem; line-height: 1.2; text-align: left; margin-bottom: 20px;">
@@ -66,7 +66,7 @@
                             <span style="font-size: 13px; font-weight: 500; color: #6b7280; margin-left: auto;">HR Manager Dashboard</span>
                         </div>
                         <div style="padding: 24px;">
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px;">
+                            <div class="stats-grid">
                                 <div style="background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); border-radius: 12px; padding: 16px; text-align: center; color: white;">
                                     <div style="font-size: 24px; font-weight: 700;">80%</div>
                                     <div style="font-size: 11px; opacity: 0.9;">Faster SOP</div>
@@ -105,8 +105,8 @@
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title">Built for HR Managers Who Want Control & Clarity</h2>
                 <p style="text-align: center; font-size: 1.125rem; color: #555; margin-bottom: 48px;">Trusted by growing HR teams who are tired of:</p>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                    <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; text-align: center;">
+                <div class="grid-4col card-row" style="margin-top: 48px;">
+                    <div class="problem-card" style="background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; text-align: center;">
                         <div style="font-size: 2rem; margin-bottom: 12px;">🔄</div>
                         <h3 style="font-size: 1rem;">Repeating Same Instructions</h3>
                         <p style="font-size: 0.875rem; color: #666; margin-top: 8px;">Daily</p>
@@ -133,7 +133,7 @@
         <section class="solution" style="padding: 80px 0; background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%);">
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title" style="color: white;">Automate Your HR Documentation — Without Extra Work</h2>
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;">
+                <div class="grid-3col" style="margin-top: 48px;">
                     <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border-radius: 16px; padding: 32px; text-align: center; color: white;">
                         <div style="font-size: 3rem; margin-bottom: 16px;">📌</div>
                         <h3 style="font-size: 1.25rem; margin-bottom: 12px;">Capture Knowledge Instantly</h3>
@@ -155,7 +155,7 @@
 
         <section style="padding: 80px 0;">
             <div class="container" style="max-width: 1100px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;">
+                <div class="grid-2col">
                     <div>
                         <div style="font-size: 3rem; margin-bottom: 16px;">🔍</div>
                         <h2 style="font-size: 1.75rem; margin-bottom: 16px;">Fix Broken HR Processes</h2>
@@ -206,7 +206,7 @@
         <section class="benefits" id="impact" style="padding: 80px 0; background: #fafafa;">
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title">Real HR Impact — Not Just Features</h2>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px;">
+                <div class="grid-4col" style="margin-top: 48px;">
                     <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 32px; text-align: center;">
                         <div style="font-size: 2.5rem; font-weight: 700; background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px;">⏱ 80%</div>
                         <h3 style="font-size: 1rem; font-weight: 600;">Faster SOP Creation</h3>
@@ -230,7 +230,7 @@
         <section class="comparison" id="comparison" style="padding: 80px 0;">
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title">Traditional HR vs Systemized HR</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px;">
+                <div class="comparison-grid" style="margin-top: 48px;">
                     <div style="background: #fff; border: 2px solid #ef4444; border-radius: 16px; padding: 32px;">
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
                             <span style="width: 32px; height: 32px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">❌</span>
@@ -295,7 +295,7 @@
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title">One Platform for All HR Workflows</h2>
                 <p style="text-align: center; font-size: 1.125rem; color: #555; margin-bottom: 48px;">From hiring to training to execution — everything in one place:</p>
-                <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
+                <div class="platform-grid">
                     <div style="background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 24px; text-align: center;">
                         <div style="font-size: 2rem; margin-bottom: 12px;">🔹</div>
                         <h3 style="font-size: 1rem; font-weight: 600;">Onboarding Systems</h3>
@@ -328,7 +328,7 @@
         <section style="padding: 80px 0;">
             <div class="container" style="max-width: 1100px;">
                 <h2 class="section-title">Make Your HR System Work Without You</h2>
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px;">
+                <div class="grid-4col" style="margin-top: 48px;">
                     <div style="text-align: center; padding: 24px;">
                         <div style="width: 64px; height: 64px; background: linear-gradient(121.6deg, #7C3AED 9.47%, #2096FF 58.97%); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.5rem;">✨</div>
                         <h3 style="font-size: 1.1rem; margin-bottom: 8px;">Turn Processes into Playbooks</h3>
@@ -356,7 +356,7 @@
         <section style="padding: 80px 0; background: #f9fafb;">
             <div class="container" style="max-width: 800px; text-align: center;">
                 <h2 class="section-title">The Result?</h2>
-                <div style="display: flex; align-items: center; justify-content: center; gap: 32px; margin-top: 48px; flex-wrap: wrap;">
+                <div class="result-container" style="margin-top: 48px;">
                     <div style="padding: 24px 32px; background: #fff; border-radius: 12px; border: 2px solid #ef4444;">
                         <p style="font-size: 1.125rem; font-weight: 600; color: #ef4444;">"Managing people daily"</p>
                     </div>
