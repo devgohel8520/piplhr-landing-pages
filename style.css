@@ -118,6 +118,26 @@ a {
     margin: -32px auto 48px;
 }
 
+.features .section-title,
+.features .section-subtitle {
+    color: var(--text);
+}
+
+.benefits .section-title,
+.benefits .section-subtitle {
+    color: var(--text);
+}
+
+.problem .section-title,
+.problem .section-subtitle {
+    color: var(--text);
+}
+
+.use-cases .section-title,
+.use-cases .section-subtitle {
+    color: var(--text);
+}
+
 .fade-in {
     opacity: 0;
     transform: translateY(30px);
@@ -337,9 +357,17 @@ a {
     border-radius: 50%;
 }
 
-.mock-dots span:nth-child(1) { background: #ef4444; }
-.mock-dots span:nth-child(2) { background: #f59e0b; }
-.mock-dots span:nth-child(3) { background: #22c55e; }
+.mock-dots span:nth-child(1) {
+    background: #ef4444;
+}
+
+.mock-dots span:nth-child(2) {
+    background: #f59e0b;
+}
+
+.mock-dots span:nth-child(3) {
+    background: #22c55e;
+}
 
 .mock-title {
     font-size: 14px;
@@ -465,11 +493,18 @@ a {
     font-size: 1.125rem;
     font-weight: 700;
     margin-bottom: 8px;
+    color: var(--text);
 }
 
 .problem-card p {
     font-size: 0.9rem;
     color: var(--text-light);
+}
+
+.problem-card .problem-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: block;
 }
 
 .solution {
@@ -552,6 +587,21 @@ a {
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 8px;
+    color: var(--text);
+}
+
+.feature-card p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.benefit-card h3 {
+    color: white;
+}
+
+.benefit-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
 }
 
 .feature-card p {
@@ -576,6 +626,18 @@ a {
     border-radius: 16px;
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: white;
+}
+
+.benefit-card .benefit-stat {
+    color: white;
+}
+
+.benefit-card h3 {
+    color: white;
+}
+
+.benefit-card p {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .benefit-stat {
@@ -607,6 +669,14 @@ a {
     background: white;
     border-radius: 16px;
     border: 1px solid var(--border);
+}
+
+.step h3 {
+    color: var(--text);
+}
+
+.step p {
+    color: var(--text-light);
 }
 
 .step-number {
@@ -680,7 +750,7 @@ a {
     position: absolute;
     inset: 0;
     background-image: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
 }
 
 .cta .container {
@@ -725,7 +795,7 @@ a {
     color: white;
 }
 
-.footer .container > div:first-child {
+.footer .container>div:first-child {
     display: flex;
     justify-content: center;
     gap: 24px;
@@ -762,16 +832,41 @@ a {
     gap: 32px;
 }
 
+.grid-3col > div h3 {
+    color: var(--text);
+}
+
+.grid-3col > div p,
+.grid-3col > div p {
+    color: var(--text-light);
+}
+
 .grid-4col {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
 }
 
+.grid-4col > div {
+    color: white;
+}
+
+.grid-4col > div h3 {
+    color: white;
+}
+
 .grid-5col {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
+}
+
+.grid-5col > div h3 {
+    color: var(--text);
+}
+
+.grid-5col > div p {
+    color: var(--text-light);
 }
 
 .hero-grid {
@@ -805,13 +900,14 @@ a {
     gap: 24px;
 }
 
-.card-row > * {
+.card-row>* {
     flex: 1 1 calc(50% - 12px);
     min-width: 280px;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
+
     .hero .container,
     .hero-grid {
         grid-template-columns: 1fr;
@@ -912,7 +1008,7 @@ a {
         flex-direction: column;
     }
 
-    .card-row > * {
+    .card-row>* {
         flex: none;
         width: 100%;
     }
@@ -932,8 +1028,8 @@ a {
         gap: 32px;
     }
 
-    .hero-grid > *,
-    .hero .container > * {
+    .hero-grid>*,
+    .hero .container>* {
         text-align: center;
     }
 
@@ -955,7 +1051,7 @@ a {
         gap: 16px;
     }
 
-    .footer .container > div:first-child {
+    .footer .container>div:first-child {
         flex-direction: column;
         align-items: center;
     }
