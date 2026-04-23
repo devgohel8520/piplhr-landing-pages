@@ -1059,7 +1059,6 @@ a {
 }
 
 .sticky-cta {
-    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -1101,16 +1100,6 @@ a {
     color: #64748b;
     margin-top: 8px;
     font-weight: 400;
-}
-
-@media (max-width: 768px) {
-    .sticky-cta {
-        display: flex;
-    }
-    
-    body {
-        padding-bottom: 90px;
-    }
 }
 
 .sticky-cta .btn {
