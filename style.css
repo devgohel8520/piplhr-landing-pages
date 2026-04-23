@@ -1095,6 +1095,14 @@ a {
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
 }
 
+.sticky-cta-text {
+    text-align: center;
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 8px;
+    font-weight: 400;
+}
+
 @media (max-width: 768px) {
     .sticky-cta {
         display: flex;
