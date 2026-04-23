@@ -513,9 +513,6 @@ a {
     color: white;
 }
 
-.solution .section-title {
-    color: white;
-}
 
 .solution .section-subtitle {
     color: rgba(255, 255, 255, 0.9) !important;
@@ -832,12 +829,12 @@ a {
     gap: 32px;
 }
 
-.grid-3col > div h3 {
+.grid-3col>div h3 {
     color: var(--text);
 }
 
-.grid-3col > div p,
-.grid-3col > div p {
+.grid-3col>div p,
+.grid-3col>div p {
     color: var(--text-light);
 }
 
@@ -847,11 +844,11 @@ a {
     gap: 24px;
 }
 
-.grid-4col > div {
+.grid-4col>div {
     color: white;
 }
 
-.grid-4col > div h3 {
+.grid-4col>div h3 {
     color: white;
 }
 
@@ -861,11 +858,11 @@ a {
     gap: 20px;
 }
 
-.grid-5col > div h3 {
+.grid-5col>div h3 {
     color: var(--text);
 }
 
-.grid-5col > div p {
+.grid-5col>div p {
     color: var(--text-light);
 }
 
