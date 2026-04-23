@@ -482,6 +482,10 @@ a {
     color: white;
 }
 
+.solution .section-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
 .solution-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
