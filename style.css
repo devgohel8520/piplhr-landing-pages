@@ -1077,11 +1077,11 @@ a {
     padding: 16px 24px;
     font-size: 15px;
     font-weight: 700;
-    flex: 1;
-    max-width: 180px;
     border-radius: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    max-width: 320px;
+    width: 100%;
 }
 
 .sticky-cta .btn-primary {
