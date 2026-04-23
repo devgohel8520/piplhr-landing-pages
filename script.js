@@ -43,10 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let scrolled = false;
     window.addEventListener('scroll', () => {
-        if (!scrolled && window.scrollY > 100) {
+        if (window.scrollY > 100) {
             scrolled = true;
             if (stickyCta) {
                 stickyCta.classList.add('visible');
+            }
+        } else {
+            scrolled = false;
+            if (stickyCta) {
+                stickyCta.classList.remove('visible');
             }
         }
     });
