@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.querySelector('.mobile-toggle');
     const nav = document.querySelector('.nav');
+    const stickyCta = document.querySelector('.sticky-cta');
 
     mobileToggle.addEventListener('click', () => {
         nav.classList.toggle('mobile-open');
@@ -38,5 +39,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             nav.classList.remove('mobile-open');
         });
+    });
+
+    let scrolled = false;
+    window.addEventListener('scroll', () => {
+        if (!scrolled && window.scrollY > 100) {
+            scrolled = true;
+            if (stickyCta) {
+                stickyCta.classList.add('visible');
+            }
+        }
     });
 });
