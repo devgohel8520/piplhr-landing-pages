@@ -885,6 +885,36 @@ a {
     gap: 32px;
 }
 
+.comparison-card {
+    padding: 32px;
+    border-radius: 12px;
+    background: var(--bg-gray);
+}
+
+.comparison-card.before {
+    border-left: 4px solid #ef4444;
+}
+
+.comparison-card.after {
+    border-left: 4px solid #22c55e;
+}
+
+.comparison-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.comparison-card ul {
+    list-style: none;
+}
+
+.comparison-card li {
+    padding: 8px 0;
+    font-size: 16px;
+    color: var(--text-light);
+}
+
 .platform-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
