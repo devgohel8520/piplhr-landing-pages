@@ -14,13 +14,13 @@
             --primary: #6366f1;
             --primary-dark: #4f46e5;
             --secondary: #10b981;
-            --dark: #0a0a0f;
-            --dark-2: #12121a;
-            --dark-3: #1a1a25;
+            --dark: #0a0a0a;
+            --dark-2: #111111;
+            --dark-3: #1a1a1a;
             --text: #ffffff;
-            --text-muted: #a1a1aa;
-            --text-muted2: #71717a;
-            --border: #27272a;
+            --text-muted: #b0b0b0;
+            --text-muted2: #888888;
+            --border: #333333;
             --green: #10b981;
             --green-dim: #059669;
         }
@@ -44,9 +44,9 @@
             inset: 0;
             z-index: 0;
             background: 
-                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
-                linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%);
         }
 
         .bg-grid {
@@ -90,7 +90,7 @@
             font-family: 'Space Grotesk', sans-serif;
             font-size: 24px;
             font-weight: 800;
-            color: var(--text);
+            color: #ffffff;
             text-decoration: none;
             letter-spacing: -0.5px;
         }
@@ -199,6 +199,7 @@
             line-height: 1.1;
             letter-spacing: -2px;
             margin-bottom: 24px;
+            color: #ffffff;
         }
 
         .hero h1 .highlight {
@@ -210,7 +211,7 @@
 
         .hero-subtitle {
             font-size: 20px;
-            color: var(--text-muted);
+            color: #e0e0e0;
             line-height: 1.6;
             margin-bottom: 20px;
             font-weight: 400;
@@ -218,7 +219,7 @@
 
         .hero-highlight {
             font-size: 24px;
-            color: var(--text);
+            color: #ffffff;
             font-weight: 600;
             margin-bottom: 48px;
             line-height: 1.5;
@@ -254,7 +255,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            color: var(--text-muted);
+            color: #e0e0e0;
             font-size: 14px;
         }
 
@@ -387,7 +388,7 @@
                 </div>
 
                 <div class="target-audience">
-                    <span>If you are <strong>business owner</strong> or <strong>HR</strong> then</span>
+                    <span style="color: #e0e0e0;">If you are <strong style="color: #fff;">business owner</strong> or <strong style="color: #fff;">HR</strong> then</span>
                 </div>
             </div>
         </section>
