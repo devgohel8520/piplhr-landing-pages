@@ -690,54 +690,6 @@
       margin-top: 2.5rem;
     }
 
-    .tried-check-card {
-      cursor: pointer;
-      position: relative;
-      user-select: none;
-    }
-
-    .tried-check-card input[type="checkbox"] {
-      display: none;
-    }
-
-    .tried-cb {
-      position: absolute;
-      top: 0.75rem;
-      right: 0.9rem;
-      width: 20px;
-      height: 20px;
-      border-radius: 6px;
-      border: 2px solid var(--border-strong);
-      background: var(--dark-2);
-      transition: background 0.2s, border-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .tried-check-card input:checked~.tried-cb {
-      background: var(--gold);
-      border-color: var(--gold-light);
-    }
-
-    .tried-check-card input:checked~.tried-cb::after {
-      content: '✓';
-      font-size: 12px;
-      font-weight: 800;
-      color: #fff;
-      line-height: 1;
-    }
-
-    .tried-check-card:has(input:checked) {
-      border-color: var(--gold-light);
-      background: rgba(30, 95, 204, 0.1);
-      transform: translateY(-3px);
-    }
-
-    .tried-check-card:has(input:checked) .tried-text {
-      color: var(--text-main);
-    }
-
     @media (max-width: 700px) {
       .tried-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -812,79 +764,6 @@
       font-size: 0.95rem;
       color: var(--text-muted);
       margin: 0;
-    }
-
-    /* ── TRIED RICH BOX ── */
-    .tried-richbox {
-      background: var(--dark-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      min-height: 90px;
-    }
-
-    .tried-richbox:focus-within {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(30, 95, 204, 0.2);
-    }
-
-    .tried-richbox-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.45rem;
-      margin-bottom: 0.5rem;
-      min-height: 28px;
-    }
-
-    .tried-placeholder {
-      font-size: 0.88rem;
-      color: var(--text-dim);
-      font-style: italic;
-      align-self: center;
-    }
-
-    .tried-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(30, 95, 204, 0.15);
-      border: 1px solid var(--border-strong);
-      border-radius: 99px;
-      padding: 0.25rem 0.75rem;
-      font-size: 0.82rem;
-      color: var(--gold-light);
-      font-weight: 600;
-    }
-
-    .tried-tag-remove {
-      cursor: pointer;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      line-height: 1;
-      transition: color 0.15s;
-    }
-
-    .tried-tag-remove:hover {
-      color: #FF6B6B;
-    }
-
-    .tried-extra-input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-main);
-      font-family: 'Noto Sans Gujarati', sans-serif;
-      font-size: 0.92rem;
-      resize: none;
-      min-height: 36px;
-      padding: 0;
-    }
-
-    .tried-extra-input::placeholder {
-      color: var(--text-dim);
-      font-size: 0.85rem;
     }
 
     /* ── ANIMATIONS ── */
@@ -1053,7 +932,7 @@
       </div>
 
       <!-- Selected count + submit -->
-      <div class="pain-submit-bar" id="pain-submit-bar" style="display:none;">
+      <div class="pain-submit-bar" id="pain-submit-bar">
         <span class="pain-selected-count" id="pain-count">0 સમસ્યા selected</span>
         <a href="#contact-form" class="pain-submit-btn" id="pain-submit-btn" onclick="sendProblemsToForm()">
           આ સમસ્યા સાથે આગળ વધો →
@@ -1069,38 +948,27 @@
       <div class="gold-line"></div>
       <h2>કદાચ તમે આ બધું<br><span>already કરી ચૂક્યા છો…</span></h2>
 
-      <p style="margin-bottom: 0.5rem; font-size: 0.95rem; color: var(--text-muted);">તમે જે કર્યું હોય તે select કરો:
-      </p>
-
-      <div class="tried-grid" id="tried-grid">
-        <label class="tried-card tried-check-card">
-          <input type="checkbox" name="tried" value="ટ્રેનિંગ લીધું છે.">
+      <div class="tried-grid">
+        <div class="tried-card">
           <div class="tried-num">01</div>
           <div class="tried-icon">🎓</div>
           <p class="tried-text">બિઝનેસ ટ્રેનિંગ લીધી છે.</p>
-          <span class="tried-cb"></span>
-        </label>
-        <label class="tried-card tried-check-card">
-          <input type="checkbox" name="tried" value="કોચિંગ કર્યું છે.">
+        </div>
+        <div class="tried-card">
           <div class="tried-num">02</div>
           <div class="tried-icon">🧑‍💻</div>
           <p class="tried-text">કોચિંગ કર્યું છે.</p>
-          <span class="tried-cb"></span>
-        </label>
-        <label class="tried-card tried-check-card">
-          <input type="checkbox" name="tried" value="કન્સલ્ટિંગ પણ કર્યું છે.">
+        </div>
+        <div class="tried-card">
           <div class="tried-num">03</div>
           <div class="tried-icon">🤝</div>
           <p class="tried-text">કન્સલ્ટિંગ પણ કર્યું છે.</p>
-          <span class="tried-cb"></span>
-        </label>
-        <label class="tried-card tried-check-card">
-          <input type="checkbox" name="tried" value="ઘણા કોર્સ પણ કર્યા છે.">
+        </div>
+        <div class="tried-card">
           <div class="tried-num">04</div>
           <div class="tried-icon">📚</div>
           <p class="tried-text">ઘણા કોર્સ પણ કર્યા છે.</p>
-          <span class="tried-cb"></span>
-        </label>
+        </div>
       </div>
 
       <div class="tried-result-box">
@@ -1112,14 +980,6 @@
           <p class="tried-result-sub">કારણ simple છે — <strong style="color: var(--gold-light);">Execution proper રીતે
               થયું નથી.</strong></p>
         </div>
-      </div>
-
-      <!-- Selected count + submit -->
-      <div class="pain-submit-bar" id="tried-submit-bar" style="display:none;">
-        <span class="pain-selected-count" id="tried-count">0 approach selected</span>
-        <a href="#contact-form" class="pain-submit-btn" onclick="sendTriedToForm()">
-          આ સાથે આગળ વધો →
-        </a>
       </div>
     </div>
   </section>
@@ -1218,32 +1078,11 @@
             <span class="field-error" id="email-err"></span>
           </div>
 
-          <!-- City -->
-          <div class="form-col-full">
-            <label for="city">તમારું શહેર *</label>
-            <input type="text" id="city" placeholder="ઉદા: રાજકોટ, સુરત, અમદાવાદ...">
-            <span class="field-error" id="city-err"></span>
-          </div>
-
           <!-- Immediate Problem -->
           <div class="form-col-full">
             <label for="problem">અત્યારે સૌથી મોટી મુશ્કેલી કઈ છે? *</label>
             <textarea id="problem" placeholder="ઉદા: ગ્રાહકો નથી વધતા, સ્ટાફ ટ્રેન નથી, payment slow છે..."></textarea>
             <span class="field-error" id="problem-err"></span>
-          </div>
-
-          <!-- Tried Approaches -->
-          <div class="form-col-full">
-            <label for="tried-box">તમે પહેલા શું try કર્યું? <span
-                style="color:var(--text-dim); font-weight:400;">(optional)</span></label>
-            <div class="tried-richbox" id="tried-box">
-              <div class="tried-richbox-tags" id="tried-tags">
-                <span class="tried-placeholder" id="tried-placeholder">ઉપર "Already Tried" section માં select કરો, અથવા
-                  અહીં type કરો...</span>
-              </div>
-              <textarea id="tried-extra" class="tried-extra-input"
-                placeholder="અન્ય કંઈ try કર્યું હોય તો અહીં લખો..."></textarea>
-            </div>
           </div>
 
           <!-- Timeline -->
@@ -1289,7 +1128,7 @@
         <div class="success-icon">✓</div>
         <h3>ખૂબ સારું! Form Submit થઈ ગઈ.</h3>
         <p>આભાર! અમે 24 કલાકમાં WhatsApp અથવા Call પર સંપર્ક કરીશું.</p>
-        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">— Team Piplhr</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-dim);">— Team BizGrowth Gujarat</p>
       </div>
     </div>
   </section>
@@ -1312,161 +1151,61 @@
       if (err) err.textContent = msg;
     }
 
-    async function submitForm() {
+    function submitForm() {
       clearErrors();
       const name = document.getElementById('name').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const email = document.getElementById('email').value.trim();
-      const city = document.getElementById('city').value.trim();
       const problem = document.getElementById('problem').value.trim();
       const timeline = document.querySelector('input[name="timeline"]:checked');
 
-      // Collect tried tags
-      const triedChecked = [...document.querySelectorAll('input[name="tried"]:checked')].map(cb => cb.value);
-      const triedExtra = document.getElementById('tried-extra').value.trim();
-      const triedAll = [...triedChecked];
-      if (triedExtra) triedAll.push(triedExtra);
-
       let valid = true;
 
-      if (!name) { showError('name', 'નામ ભરવું જરૂરી છે.'); valid = false; }
+      if (!name) {
+        showError('name', 'નામ ભરવું જરૂરી છે.');
+        valid = false;
+      }
 
+      // Mobile: strip spaces/dashes, must be 10 digits, start with 6-9
       const phoneClean = phone.replace(/[\s\-\+]/g, '');
       const phoneReg = /^[6-9]\d{9}$/;
-      if (!phone) { showError('phone', 'મોબાઇલ નંબર ભરવો જરૂરી છે.'); valid = false; }
-      else if (!phoneReg.test(phoneClean)) { showError('phone', 'Valid 10 અંકનો ભારતીય મોબાઇલ નંબર ભરો. (ઉદા: 98765 43210)'); valid = false; }
+      if (!phone) {
+        showError('phone', 'મોબાઇલ નંબર ભરવો જરૂરી છે.');
+        valid = false;
+      } else if (!phoneReg.test(phoneClean)) {
+        showError('phone', 'Valid 10 અંકનો ભારતીય મોબાઇલ નંબર ભરો. (ઉદા: 98765 43210)');
+        valid = false;
+      }
 
+      // Email validation
       const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-      if (!email) { showError('email', 'Email ભરવો જરૂરી છે.'); valid = false; }
-      else if (!emailReg.test(email)) { showError('email', 'Valid email address ભરો. (ઉદા: name@gmail.com)'); valid = false; }
+      if (!email) {
+        showError('email', 'Email ભરવો જરૂરી છે.');
+        valid = false;
+      } else if (!emailReg.test(email)) {
+        showError('email', 'Valid email address ભરો. (ઉદા: name@gmail.com)');
+        valid = false;
+      }
 
-      if (!city) { showError('city', 'તમારું શહેર ભરવું જરૂરી છે.'); valid = false; }
-
-      if (!problem) { showError('problem', 'તમારી મુશ્કેલી જણાવો.'); valid = false; }
+      if (!problem) {
+        showError('problem', 'તમારી મુશ્કેલી જણાવો.');
+        valid = false;
+      }
 
       if (!valid) return;
 
-      // Disable submit button
-      const submitBtn = document.querySelector('.submit-btn');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-      }
-
-      try {
-        // Step 1: Add contact to CRM
-        const contactRes = await fetch('/api/crm', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fn: 'addNewContact',
-            args: [{
-              name: name,
-              mobile: phone,
-              email: email,
-              location: city,
-              status: 'New',
-              source: 'Inbound'
-            }]
-          })
-        });
-
-        const contactData = await contactRes.json();
-
-        if (contactData.result && contactData.result.id) {
-          // Step 2: Add problem as remark
-          const problemRemark = `અત્યારે સૌથી મોટી મુશ્કેલી: ${problem}${timeline ? '\nTimeline: ' + timeline.value : ''}`;
-          const remarkRes = await fetch('/api/crm', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              fn: 'addRemark',
-              args: [contactData.result.id, name, problemRemark, '']
-            })
-          });
-
-          // Step 3: Add tried info as second remark (if any)
-          if (triedAll.length > 0) {
-            const triedRemark = `તમે પહેલા શું try કર્યું: ${triedAll.join(', ')}`;
-            await fetch('/api/crm', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                fn: 'addRemark',
-                args: [contactData.result.id, name, triedRemark, '']
-              })
-            });
-          }
-        }
-
-        // Show success
-        document.getElementById('main-form').style.display = 'none';
-        document.getElementById('success-overlay').style.display = 'block';
-
-      } catch (err) {
-        console.error('CRM submission error:', err);
-        // Still show success even if CRM fails (don't block user)
-        document.getElementById('main-form').style.display = 'none';
-        document.getElementById('success-overlay').style.display = 'block';
-      }
+      document.getElementById('main-form').style.display = 'none';
+      document.getElementById('success-overlay').style.display = 'block';
     }
 
-    // Tried checkbox live count
-    document.querySelectorAll('input[name="tried"]').forEach(cb => {
-      cb.addEventListener('change', () => { updateTriedCount(); renderTriedTags(); });
-    });
-    function updateTriedCount() {
-      const checked = document.querySelectorAll('input[name="tried"]:checked');
-      const bar = document.getElementById('tried-submit-bar');
-      document.getElementById('tried-count').textContent = checked.length + ' approach selected';
-      bar.style.display = checked.length > 0 ? 'flex' : 'none';
-    }
-
-    function renderTriedTags() {
-      const checked = [...document.querySelectorAll('input[name="tried"]:checked')];
-      const tagsEl = document.getElementById('tried-tags');
-      const placeholder = document.getElementById('tried-placeholder');
-      tagsEl.innerHTML = '';
-      if (checked.length === 0) {
-        tagsEl.appendChild(placeholder);
-        return;
-      }
-      checked.forEach(cb => {
-        const tag = document.createElement('span');
-        tag.className = 'tried-tag';
-        tag.innerHTML = cb.value + ' <span class="tried-tag-remove" data-val="' + cb.value + '">✕</span>';
-        tagsEl.appendChild(tag);
-      });
-      // Remove tag on ✕ click → uncheck the corresponding checkbox
-      tagsEl.querySelectorAll('.tried-tag-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const val = btn.getAttribute('data-val');
-          const cb = [...document.querySelectorAll('input[name="tried"]')].find(c => c.value === val);
-          if (cb) { cb.checked = false; cb.dispatchEvent(new Event('change')); }
-        });
-      });
-    }
-
-    function sendTriedToForm() {
-      renderTriedTags();
-      const checked = [...document.querySelectorAll('input[name="tried"]:checked')];
-      if (checked.length === 0) return;
-      const bar = document.getElementById('tried-submit-bar');
-      document.getElementById('tried-count').textContent = checked.length + ' approach selected';
-      bar.style.display = checked.length > 0 ? 'flex' : 'none';
-    }
-
-
+    // Pain checkbox live count
     document.querySelectorAll('input[name="problem"]').forEach(cb => {
       cb.addEventListener('change', updatePainCount);
     });
     function updatePainCount() {
       const checked = document.querySelectorAll('input[name="problem"]:checked');
-      const bar = document.getElementById('pain-submit-bar');
       const countEl = document.getElementById('pain-count');
       countEl.textContent = checked.length + ' સમસ્યા selected';
-      bar.style.display = checked.length > 0 ? 'flex' : 'none';
     }
 
     function sendProblemsToForm() {

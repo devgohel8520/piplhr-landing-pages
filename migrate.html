@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Data Migration Tool</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #f8f8f8;
+            --surface: #fff;
+            --border: #e4e4e7;
+            --border-light: #f4f4f5;
+            --text-1: #09090b;
+            --text-2: #71717a;
+            --text-3: #a1a1aa;
+            --accent: #18181b;
+            --accent-fg: #fafafa;
+            --green: #16a34a;
+            --red: #dc2626;
+            --yellow: #d97706;
+            --r: 8px;
+            --rl: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            min-height: 100vh;
+            padding: 32px 20px;
+            font-size: 14px
+        }
+
+        .wrap {
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .sub {
+            color: var(--text-2);
+            font-size: 13px;
+            margin-bottom: 28px
+        }
+
+        /* Steps */
+        .steps {
+            display: flex;
+            gap: 0;
+            margin-bottom: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            overflow: hidden
+        }
+
+        .step {
+            flex: 1;
+            padding: 14px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-3);
+            border-right: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .step:last-child {
+            border-right: none
+        }
+
+        .step.active {
+            color: var(--text-1);
+            background: #fafafa
+        }
+
+        .step.done {
+            color: var(--green)
+        }
+
+        .step-num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            flex-shrink: 0
+        }
+
+        .step.active .step-num {
+            background: var(--accent);
+            color: var(--accent-fg)
+        }
+
+        .step.done .step-num {
+            background: var(--green);
+            color: #fff
+        }
+
+        /* Card */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .06)
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .card-sub {
+            font-size: 12px;
+            color: var(--text-2);
+            margin-bottom: 18px
+        }
+
+        /* URL input */
+        .url-row {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color .15s
+        }
+
+        .url-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, .08)
+        }
+
+        /* Drop zone */
+        .dropzone {
+            border: 2px dashed var(--border);
+            border-radius: var(--rl);
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all .15s;
+            position: relative
+        }
+
+        .dropzone:hover,
+        .dropzone.drag {
+            border-color: var(--accent);
+            background: #fafafa
+        }
+
+        .dropzone input[type=file] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%
+        }
+
+        .dz-icon {
+            font-size: 36px;
+            margin-bottom: 10px
+        }
+
+        .dz-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px
+        }
+
+        .dz-sub {
+            font-size: 12px;
+            color: var(--text-2)
+        }
+
+        /* Column mapping */
+        .map-grid {
+            display: grid;
+            grid-template-columns: 1fr 24px 1fr;
+            gap: 8px;
+            align-items: center;
+            margin-top: 4px
+        }
+
+        .map-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-2);
+            text-transform: uppercase;
+            letter-spacing: .05em
+        }
+
+        .map-arrow {
+            text-align: center;
+            color: var(--text-3);
+            font-size: 16px
+        }
+
+        .map-row {
+            display: contents
+        }
+
+        .map-select {
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            font-family: inherit;
+            font-size: 13px;
+            background: var(--surface);
+            outline: none;
+            cursor: pointer;
+            transition: border-color .15s;
+            width: 100%
+        }
+
+        .map-select:focus {
+            border-color: var(--accent)
+        }
+
+        .map-field {
+            padding: 7px 10px;
+            background: var(--border-light);
+            border-radius: var(--r);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-1)
+        }
+
+        .map-req {
+            color: var(--red);
+            margin-left: 2px
+        }
+
+        /* Preview table */
+        .preview-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            max-height: 320px;
+            overflow-y: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px
+        }
+
+        th {
+            padding: 9px 12px;
+            background: var(--border-light);
+            text-align: left;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 10.5px;
+            letter-spacing: .05em;
+            color: var(--text-2);
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            border-bottom: 1px solid var(--border)
+        }
+
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+            white-space: nowrap
+        }
+
+        tr:last-child td {
+            border-bottom: none
+        }
+
+        tr:hover td {
+            background: #fafafa
+        }
+
+        td.empty {
+            color: var(--text-3);
+            font-style: italic
+        }
+
+        /* Progress */
+        .prog-bar-wrap {
+            background: var(--border-light);
+            border-radius: 99px;
+            height: 8px;
+            overflow: hidden;
+            margin: 12px 0
+        }
+
+        .prog-bar {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 99px;
+            transition: width .3s ease;
+            width: 0%
+        }
+
+        .prog-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-2)
+        }
+
+        /* Log */
+        .log {
+            background: #09090b;
+            border-radius: var(--r);
+            padding: 14px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.7
+        }
+
+        .log-line {
+            display: block
+        }
+
+        .log-ok {
+            color: #4ade80
+        }
+
+        .log-err {
+            color: #f87171
+        }
+
+        .log-info {
+            color: #94a3b8
+        }
+
+        .log-warn {
+            color: #fbbf24
+        }
+
+        /* Summary cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px
+        }
+
+        .sum-card {
+            background: var(--border-light);
+            border-radius: var(--r);
+            padding: 14px;
+            text-align: center
+        }
+
+        .sum-num {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1
+        }
+
+        .sum-label {
+            font-size: 11px;
+            color: var(--text-2);
+            margin-top: 4px;
+            font-weight: 500
+        }
+
+        .sum-card.ok .sum-num {
+            color: var(--green)
+        }
+
+        .sum-card.err .sum-num {
+            color: var(--red)
+        }
+
+        .sum-card.skip .sum-num {
+            color: var(--yellow)
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: var(--r);
+            border: 1px solid transparent;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+            white-space: nowrap
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--accent-fg)
+        }
+
+        .btn-primary:hover {
+            opacity: .85
+        }
+
+        .btn-default {
+            background: var(--surface);
+            color: var(--text-1);
+            border-color: var(--border)
+        }
+
+        .btn-default:hover {
+            background: var(--border-light)
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green)
+        }
+
+        .btn-green:hover {
+            background: #15803d
+        }
+
+        .btn[disabled] {
+            opacity: .45;
+            cursor: not-allowed;
+            pointer-events: none
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600
+        }
+
+        .badge-new {
+            background: #f4f4f5;
+            color: #71717a
+        }
+
+        .badge-count {
+            background: #eff6ff;
+            color: #1d4ed8
+        }
+
+        /* Alert */
+        .alert {
+            padding: 12px 14px;
+            border-radius: var(--r);
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start
+        }
+
+        .alert-warn {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4d8;
+            border-radius: 99px
+        }
+
+        @media(max-width:600px) {
+            .steps {
+                flex-direction: column
+            }
+
+            .step {
+                border-right: none;
+                border-bottom: 1px solid var(--border)
+            }
+
+            .step:last-child {
+                border-bottom: none
+            }
+
+            .map-grid {
+                grid-template-columns: 1fr
+            }
+
+            .map-arrow {
+                display: none
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr
+            }
+
+            .url-row {
+                flex-direction: column;
+                align-items: stretch
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <h1>📊 CRM Migration Tool</h1>
+        <p class="sub">Import contacts from Excel or CSV into your Vercel Postgres database</p>
+
+        <!-- Steps indicator -->
+        <div class="steps">
+            <div class="step active" id="step1"><span class="step-num">1</span> Set API URL</div>
+            <div class="step" id="step2"><span class="step-num">2</span> Upload File</div>
+            <div class="step" id="step3"><span class="step-num">3</span> Map Columns</div>
+            <div class="step" id="step4"><span class="step-num">4</span> Preview & Import</div>
+            <div class="step" id="step5"><span class="step-num">5</span> Done</div>
+        </div>
+
+        <!-- STEP 1: API URL -->
+        <div class="card" id="card-step1">
+            <div class="card-title">Step 1 — Your Vercel App URL</div>
+            <div class="card-sub">Enter your deployed Vercel URL so the tool knows where to send data</div>
+            <div class="url-row">
+                <input type="url" class="url-input" id="apiUrl" placeholder="https://piplhr-crm.vercel.app" value="">
+                <button class="btn btn-primary" onclick="confirmUrl()">Next →</button>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:var(--text-2)">
+                The tool will post to <code
+                    style="background:var(--border-light);padding:1px 5px;border-radius:4px">{url}/api/crm</code>
+            </div>
+        </div>
+
+        <!-- STEP 2: Upload -->
+        <div class="card" id="card-step2" style="display:none">
+            <div class="card-title">Step 2 — Upload your Excel or CSV file</div>
+            <div class="card-sub">Supports .xlsx, .xls, .csv — first row must be column headers</div>
+            <div class="alert alert-info">
+                💡 Your data stays in your browser — it's never sent anywhere except your own Vercel app.
+            </div>
+            <div class="dropzone" id="dropzone">
+                <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])">
+                <div class="dz-icon">📁</div>
+                <div class="dz-title">Drop your file here or click to browse</div>
+                <div class="dz-sub">.xlsx · .xls · .csv</div>
+            </div>
+        </div>
+
+        <!-- STEP 3: Map columns -->
+        <div class="card" id="card-step3" style="display:none">
+            <div class="card-title">Step 3 — Map your columns</div>
+            <div class="card-sub">Match your spreadsheet columns to CRM fields. Leave blank to skip.</div>
+            <div id="mappingUI"></div>
+            <div class="btn-row">
+                <button class="btn btn-default" onclick="goStep(2)">← Back</button>
+                <button class="btn btn-primary" onclick="buildPreview()">Preview Data →</button>
+            </div>
+        </div>
+
+        <!-- STEP 4: Preview & Import -->
+        <div class="card" id="card-step4" style="display:none">
+            <div class="card-title">Step 4 — Preview & Import</div>
+            <div class="card-sub" id="previewMeta"></div>
+            <div id="previewTable"></div>
+            <div class="btn-row">
+                <button class="btn btn-default" onclick="goStep(3)">← Back</button>
+                <button class="btn btn-green" id="importBtn" onclick="startImport()">
+                    🚀 Import All Contacts
+                </button>
+            </div>
+
+            <!-- Progress (hidden until import starts) -->
+            <div id="importProgress" style="display:none;margin-top:20px">
+                <div class="prog-info">
+                    <span id="progText">Importing…</span>
+                    <span id="progPct">0%</span>
+                </div>
+                <div class="prog-bar-wrap">
+                    <div class="prog-bar" id="progBar"></div>
+                </div>
+                <div class="log" id="importLog"></div>
+            </div>
+        </div>
+
+        <!-- STEP 5: Done -->
+        <div class="card" id="card-step5" style="display:none">
+            <div class="card-title">✅ Import Complete!</div>
+            <div class="summary-grid">
+                <div class="sum-card ok">
+                    <div class="sum-num" id="sumOk">0</div>
+                    <div class="sum-label">Imported</div>
+                </div>
+                <div class="sum-card err">
+                    <div class="sum-num" id="sumErr">0</div>
+                    <div class="sum-label">Failed</div>
+                </div>
+                <div class="sum-card skip">
+                    <div class="sum-num" id="sumSkip">0</div>
+                    <div class="sum-label">Skipped (no name/mobile)</div>
+                </div>
+            </div>
+            <div class="btn-row" style="margin-top:20px">
+                <button class="btn btn-primary" id="openCrmBtn" onclick="openCRM()">Open CRM Dashboard →</button>
+                <button class="btn btn-default" onclick="resetTool()">Import Another File</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ─── State ────────────────────────────────────────────────────────────────────
+        var apiUrl = '';
+        var rawRows = [];   // all rows from file as objects
+        var headers = [];   // column headers from file
+        var mappedData = [];   // final mapped rows ready to import
+        var currentStep = 1;
+
+        // CRM fields definition
+        var CRM_FIELDS = [
+            { key: 'name', label: 'Name', required: true },
+            { key: 'mobile', label: 'Mobile', required: true },
+            { key: 'company', label: 'Company', required: false },
+            { key: 'designation', label: 'Designation', required: false },
+            { key: 'email', label: 'Email', required: false },
+            { key: 'location', label: 'Location', required: false },
+            { key: 'status', label: 'Status', required: false },
+            { key: 'source', label: 'Source', required: false },
+            { key: 'link', label: 'Link / URL', required: false },
+        ];
+
+        var VALID_STATUSES = ['New', 'Contacted', 'Qualified', 'Demo', 'Register', 'Won', 'Nurture'];
+
+        // ─── Step navigation ──────────────────────────────────────────────────────────
+        function goStep(n) {
+            for (var i = 1; i <= 5; i++) {
+                var card = document.getElementById('card-step' + i);
+                var step = document.getElementById('step' + i);
+                card.style.display = (i === n) ? '' : 'none';
+                step.classList.remove('active', 'done');
+                if (i < n) step.classList.add('done');
+                if (i === n) step.classList.add('active');
+                // tick the step-num for done
+                if (i < n) step.querySelector('.step-num').textContent = '✓';
+                else step.querySelector('.step-num').textContent = i;
+            }
+            currentStep = n;
+            window.scrollTo(0, 0);
+        }
+
+        // ─── Step 1: confirm URL ──────────────────────────────────────────────────────
+        function confirmUrl() {
+            var v = document.getElementById('apiUrl').value.trim().replace(/\/$/, '');
+            if (!v || !v.startsWith('http')) {
+                alert('Please enter a valid URL starting with https://');
+                return;
+            }
+            apiUrl = v;
+            goStep(2);
+        }
+
+        // ─── Step 2: file upload ──────────────────────────────────────────────────────
+        var dz = document.getElementById('dropzone');
+        dz.addEventListener('dragover', function (e) { e.preventDefault(); dz.classList.add('drag'); });
+        dz.addEventListener('dragleave', function () { dz.classList.remove('drag'); });
+        dz.addEventListener('drop', function (e) {
+            e.preventDefault(); dz.classList.remove('drag');
+            var f = e.dataTransfer.files[0];
+            if (f) handleFile(f);
+        });
+
+        function handleFile(file) {
+            if (!file) return;
+            var ext = file.name.split('.').pop().toLowerCase();
+            if (!['xlsx', 'xls', 'csv'].includes(ext)) {
+                alert('Please upload an Excel (.xlsx, .xls) or CSV file.');
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    var data = new Uint8Array(e.target.result);
+                    var wb = XLSX.read(data, { type: 'array' });
+                    var ws = wb.Sheets[wb.SheetNames[0]];
+                    var json = XLSX.utils.sheet_to_json(ws, { defval: '' });
+
+                    if (!json || json.length === 0) {
+                        alert('The file appears to be empty or has no data rows.');
+                        return;
+                    }
+
+                    rawRows = json;
+                    headers = Object.keys(json[0]);
+                    buildMappingUI();
+                    goStep(3);
+                } catch (err) {
+                    alert('Could not read file: ' + err.message);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // ─── Step 3: column mapping ───────────────────────────────────────────────────
+        function buildMappingUI() {
+            var html = '<div class="map-grid">';
+            html += '<div class="map-label">Your column</div><div></div><div class="map-label">CRM field</div>';
+
+            CRM_FIELDS.forEach(function (field) {
+                var bestMatch = autoMatch(field.key, field.label, headers);
+                var opts = '<option value="">— skip —</option>';
+                headers.forEach(function (h) {
+                    opts += '<option value="' + escHtml(h) + '"' + (h === bestMatch ? ' selected' : '') + '>' + escHtml(h) + '</option>';
+                });
+                html +=
+                    '<div class="map-row">' +
+                    '<select class="map-select" id="map-' + field.key + '">' + opts + '</select>' +
+                    '<div class="map-arrow">→</div>' +
+                    '<div class="map-field">' + field.label + (field.required ? '<span class="map-req">*</span>' : '') + '</div>' +
+                    '</div>';
+            });
+
+            html += '</div>';
+            html += '<p style="font-size:12px;color:var(--text-2);margin-top:12px">* Required fields. Rows without Name or Mobile will be skipped.</p>';
+            document.getElementById('mappingUI').innerHTML = html;
+        }
+
+        function autoMatch(key, label, headers) {
+            // Try to auto-detect common column names
+            var synonyms = {
+                name: ['name', 'full name', 'contact name', 'full_name', 'contact'],
+                mobile: ['mobile', 'phone', 'cell', 'contact number', 'mobile no', 'phone number', 'mobile number', 'contact no', 'number'],
+                company: ['company', 'organization', 'org', 'firm', 'business', 'company name'],
+                designation: ['designation', 'title', 'job title', 'position', 'role', 'job role'],
+                email: ['email', 'e-mail', 'email id', 'email address', 'mail'],
+                location: ['location', 'city', 'area', 'address', 'place', 'region'],
+                status: ['status', 'stage', 'lead status', 'lead stage'],
+                source: ['source', 'lead source', 'channel', 'from'],
+                link: ['link', 'url', 'website', 'linkedin', 'profile', 'profile url'],
+            };
+
+            var checks = (synonyms[key] || [label.toLowerCase()]);
+            var hl = headers.map(function (h) { return h.toLowerCase().trim(); });
+
+            for (var i = 0; i < checks.length; i++) {
+                var idx = hl.indexOf(checks[i]);
+                if (idx >= 0) return headers[idx];
+            }
+            // partial match
+            for (var i = 0; i < checks.length; i++) {
+                for (var j = 0; j < hl.length; j++) {
+                    if (hl[j].indexOf(checks[i]) >= 0 || checks[i].indexOf(hl[j]) >= 0) return headers[j];
+                }
+            }
+            return '';
+        }
+
+        // ─── Step 4: preview ──────────────────────────────────────────────────────────
+        function buildPreview() {
+            var mapping = {};
+            CRM_FIELDS.forEach(function (f) {
+                mapping[f.key] = document.getElementById('map-' + f.key).value;
+            });
+
+            if (!mapping.name && !mapping.mobile) {
+                alert('Please map at least the Name or Mobile column.');
+                return;
+            }
+
+            mappedData = [];
+            var skipped = 0;
+
+            rawRows.forEach(function (row) {
+                var c = {};
+                CRM_FIELDS.forEach(function (f) {
+                    c[f.key] = mapping[f.key] ? String(row[mapping[f.key]] || '').trim() : '';
+                });
+
+                // Validate status
+                if (c.status && !VALID_STATUSES.includes(c.status)) c.status = 'New';
+                if (!c.status) c.status = 'New';
+
+                // Skip if no name AND no mobile
+                if (!c.name && !c.mobile) { skipped++; return; }
+
+                mappedData.push(c);
+            });
+
+            // Build preview table (first 20 rows)
+            var preview = mappedData.slice(0, 20);
+            var tableHtml =
+                '<div class="preview-wrap"><table><thead><tr>' +
+                CRM_FIELDS.map(function (f) { return '<th>' + f.label + '</th>'; }).join('') +
+                '</tr></thead><tbody>';
+
+            preview.forEach(function (c) {
+                tableHtml += '<tr>';
+                CRM_FIELDS.forEach(function (f) {
+                    tableHtml += '<td' + (c[f.key] ? '' : ' class="empty"') + '>' + (c[f.key] || '—') + '</td>';
+                });
+                tableHtml += '</tr>';
+            });
+
+            tableHtml += '</tbody></table></div>';
+
+            document.getElementById('previewMeta').innerHTML =
+                '<strong>' + mappedData.length + '</strong> contacts ready to import' +
+                (skipped > 0 ? ' &nbsp;·&nbsp; <span style="color:var(--yellow)">' + skipped + ' rows skipped</span>' : '') +
+                (mappedData.length > 20 ? ' &nbsp;·&nbsp; Showing first 20 rows' : '');
+
+            document.getElementById('previewTable').innerHTML = tableHtml;
+            goStep(4);
+        }
+
+        // ─── Step 5: import ───────────────────────────────────────────────────────────
+        var importRunning = false;
+
+        async function startImport() {
+            if (importRunning) return;
+            if (!confirm('Import ' + mappedData.length + ' contacts into your CRM database?\n\nThis will ADD to existing data (not replace it).')) return;
+
+            importRunning = true;
+            document.getElementById('importBtn').disabled = true;
+            document.getElementById('importProgress').style.display = '';
+
+            var log = document.getElementById('importLog');
+            var bar = document.getElementById('progBar');
+            var pct = document.getElementById('progPct');
+            var ptext = document.getElementById('progText');
+            var ok = 0, err = 0, skip = 0;
+
+            log.innerHTML = '';
+
+            function addLog(msg, type) {
+                var span = document.createElement('span');
+                span.className = 'log-line log-' + (type || 'info');
+                span.textContent = msg;
+                log.appendChild(span);
+                log.scrollTop = log.scrollHeight;
+            }
+
+            addLog('Starting import of ' + mappedData.length + ' contacts…', 'info');
+
+            // Import in batches of 5 for stability
+            var BATCH = 5;
+            for (var i = 0; i < mappedData.length; i++) {
+                var c = mappedData[i];
+                try {
+                    var resp = await fetch(apiUrl + '/api/crm', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ fn: 'addNewContact', args: [c] })
+                    });
+                    var data = await resp.json();
+                    if (data && data.result && data.result.success) {
+                        ok++;
+                        if (ok <= 5 || ok % 10 === 0) addLog('✓ ' + (c.name || c.mobile) + ' imported', 'ok');
+                    } else {
+                        err++;
+                        addLog('✗ ' + (c.name || c.mobile) + ': ' + (data.error || 'unknown error'), 'err');
+                    }
+                } catch (e) {
+                    err++;
+                    addLog('✗ ' + (c.name || c.mobile) + ': ' + e.message, 'err');
+                }
+
+                // Update progress
+                var progress = Math.round(((i + 1) / mappedData.length) * 100);
+                bar.style.width = progress + '%';
+                pct.textContent = progress + '%';
+                ptext.textContent = 'Importing ' + (i + 1) + ' of ' + mappedData.length + '…';
+
+                // Small delay every batch to avoid rate limiting
+                if ((i + 1) % BATCH === 0) await sleep(200);
+            }
+
+            addLog('─────────────────────────────────', 'info');
+            addLog('Done! ✓ ' + ok + ' imported  ✗ ' + err + ' failed', ok === mappedData.length ? 'ok' : 'warn');
+
+            document.getElementById('sumOk').textContent = ok;
+            document.getElementById('sumErr').textContent = err;
+            document.getElementById('sumSkip').textContent = (rawRows.length - mappedData.length);
+
+            importRunning = false;
+            setTimeout(function () { goStep(5); }, 800);
+        }
+
+        function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+        function openCRM() {
+            window.open(apiUrl, '_blank');
+        }
+
+        function resetTool() {
+            rawRows = []; headers = []; mappedData = [];
+            document.getElementById('fileInput').value = '';
+            document.getElementById('importProgress').style.display = 'none';
+            document.getElementById('importBtn').disabled = false;
+            goStep(2);
+        }
+
+        function escHtml(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+
+</html>

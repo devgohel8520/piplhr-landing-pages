@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Export Contacts · CRM Piplhr</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #f8f8f8;
+            --surface: #fff;
+            --border: #e4e4e7;
+            --border-light: #f4f4f5;
+            --text-1: #09090b;
+            --text-2: #71717a;
+            --text-3: #a1a1aa;
+            --accent: #18181b;
+            --accent-fg: #fafafa;
+            --ring: #d4d4d8;
+            --green: #16a34a;
+            --blue: #2563eb;
+            --r: 8px;
+            --rl: 12px;
+            --sh1: 0 1px 2px rgba(0, 0, 0, .05);
+            --sh2: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+            --sh3: 0 4px 6px -1px rgba(0, 0, 0, .07), 0 2px 4px rgba(0, 0, 0, .05);
+            --sh4: 0 10px 15px -3px rgba(0, 0, 0, .08), 0 4px 6px rgba(0, 0, 0, .04);
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        /* ─── Topbar ─────────────────────────────────────────────────────────────── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            gap: 12px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            white-space: nowrap;
+            text-decoration: none;
+            color: var(--text-1)
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .topbar-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-2);
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: var(--r);
+            transition: all .15s
+        }
+
+        .topbar-back:hover {
+            background: var(--border-light);
+            color: var(--text-1)
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        /* ─── Layout ─────────────────────────────────────────────────────────────── */
+        .main {
+            padding: 24px 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%
+        }
+
+        .page-hd {
+            margin-bottom: 24px
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px
+        }
+
+        .page-sub {
+            font-size: 13px;
+            color: var(--text-2)
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            align-items: start
+        }
+
+        /* ─── Sidebar (filters + columns) ───────────────────────────────────────── */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: sticky;
+            top: 72px
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            padding: 18px;
+            box-shadow: var(--sh1)
+        }
+
+        .panel-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-1);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .panel-title svg {
+            color: var(--text-3)
+        }
+
+        /* Status filter checkboxes */
+        .status-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none
+        }
+
+        .status-item label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            flex: 1
+        }
+
+        .status-item input[type=checkbox] {
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            accent-color: var(--accent)
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        .status-count {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-3);
+            background: var(--border-light);
+            padding: 1px 7px;
+            border-radius: 99px
+        }
+
+        /* Column picker */
+        .col-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px
+        }
+
+        .col-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none
+        }
+
+        .col-item label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            flex: 1
+        }
+
+        .col-item input[type=checkbox] {
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            accent-color: var(--accent)
+        }
+
+        .col-required {
+            font-size: 10px;
+            color: var(--text-3);
+            margin-left: auto
+        }
+
+        /* Source filter */
+        .source-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            max-height: 180px;
+            overflow-y: auto
+        }
+
+        /* Select-all link */
+        .sel-all-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px
+        }
+
+        .sel-link {
+            font-size: 12px;
+            color: var(--blue);
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none
+        }
+
+        .sel-link:hover {
+            text-decoration: underline
+        }
+
+        /* ─── Main content ───────────────────────────────────────────────────────── */
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        /* Summary bar */
+        .summary-bar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: var(--sh1)
+        }
+
+        .sum-stats {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap
+        }
+
+        .sum-item {
+            text-align: center
+        }
+
+        .sum-num {
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1
+        }
+
+        .sum-label {
+            font-size: 11px;
+            color: var(--text-2);
+            font-weight: 500;
+            margin-top: 2px
+        }
+
+        .sum-divider {
+            width: 1px;
+            height: 36px;
+            background: var(--border)
+        }
+
+        /* Search in export */
+        .search-wrap {
+            position: relative
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-1);
+            outline: none;
+            transition: border-color .15s
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, .08)
+        }
+
+        .search-input::placeholder {
+            color: var(--text-3)
+        }
+
+        /* Export actions */
+        .export-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        /* Preview table */
+        .preview-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            box-shadow: var(--sh1);
+            overflow: hidden
+        }
+
+        .preview-hd {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px
+        }
+
+        .preview-title {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .preview-meta {
+            font-size: 12px;
+            color: var(--text-3)
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            max-height: 480px;
+            overflow-y: auto
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 2
+        }
+
+        th {
+            padding: 10px 12px;
+            background: var(--border-light);
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--text-2);
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border)
+        }
+
+        td {
+            padding: 11px 12px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+            white-space: nowrap;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        tbody tr:hover td {
+            background: #fafafa
+        }
+
+        .td-empty {
+            color: var(--text-3);
+            font-style: italic;
+            font-size: 12px
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11.5px;
+            font-weight: 600
+        }
+
+        .s-New {
+            background: #f4f4f5;
+            color: #52525b
+        }
+
+        .s-Contacted {
+            background: #eff6ff;
+            color: #1d4ed8
+        }
+
+        .s-Qualified {
+            background: #fefce8;
+            color: #854d0e
+        }
+
+        .s-Demo {
+            background: #fff7ed;
+            color: #c2410c
+        }
+
+        .s-Register {
+            background: #f0fdf4;
+            color: #15803d
+        }
+
+        .s-Won {
+            background: #dcfce7;
+            color: #15803d
+        }
+
+        .s-Nurture {
+            background: #faf5ff;
+            color: #7e22ce
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--r);
+            border: 1px solid transparent;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+            white-space: nowrap;
+            text-decoration: none
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--accent-fg)
+        }
+
+        .btn-primary:hover {
+            opacity: .85
+        }
+
+        .btn-default {
+            background: var(--surface);
+            color: var(--text-1);
+            border-color: var(--border)
+        }
+
+        .btn-default:hover {
+            background: var(--border-light);
+            border-color: var(--ring)
+        }
+
+        .btn-green {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green)
+        }
+
+        .btn-green:hover {
+            background: #15803d
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px
+        }
+
+        .btn[disabled] {
+            opacity: .45;
+            cursor: not-allowed;
+            pointer-events: none
+        }
+
+        /* Empty / loading states */
+        .sbox {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-3)
+        }
+
+        .sbox p {
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: var(--text-2)
+        }
+
+        .sbox small {
+            font-size: 12px
+        }
+
+        .spin {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            margin: 0 auto 12px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* Toast */
+        .toast-wrap {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .toast {
+            background: var(--accent);
+            color: var(--accent-fg);
+            padding: 10px 16px;
+            border-radius: var(--r);
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: var(--sh4);
+            animation: toastIn .2s ease;
+            max-width: 300px
+        }
+
+        .toast.err {
+            background: #dc2626
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--ring);
+            border-radius: 99px
+        }
+
+        /* ─── Mobile ─────────────────────────────────────────────────────────────── */
+        @media(max-width:860px) {
+            .layout {
+                grid-template-columns: 1fr
+            }
+
+            .sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px
+            }
+        }
+
+        @media(max-width:560px) {
+            .sidebar {
+                grid-template-columns: 1fr
+            }
+
+            .summary-bar {
+                flex-direction: column;
+                align-items: flex-start
+            }
+
+            .sum-divider {
+                display: none
+            }
+
+            .export-actions {
+                flex-direction: column
+            }
+
+            .export-actions .btn {
+                justify-content: center
+            }
+
+            .main {
+                padding: 14px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <a href="/" class="brand"><span class="brand-dot"></span> CRM · Piplhr</a>
+        <div class="topbar-right">
+            <a href="/" class="topbar-back">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 5l-7 7 7 7" />
+                </svg>
+                Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="page-hd">
+            <div class="page-title">Export Contacts</div>
+            <div class="page-sub">Filter, select columns and download as CSV</div>
+        </div>
+
+        <div class="layout">
+
+            <!-- ─── Sidebar ──────────────────────────────────────────────────────── -->
+            <div class="sidebar">
+
+                <!-- Status filter -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                        </svg>
+                        Filter by Status
+                    </div>
+                    <div class="sel-all-row">
+                        <span class="sel-link" onclick="setAllStatuses(true)">Select all</span>
+                        <span class="sel-link" onclick="setAllStatuses(false)">Clear all</span>
+                    </div>
+                    <div class="status-list" id="statusList">
+                        <!-- filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Source filter -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="2" y1="12" x2="22" y2="12" />
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                        Filter by Source
+                    </div>
+                    <div class="sel-all-row">
+                        <span class="sel-link" onclick="setAllSources(true)">Select all</span>
+                        <span class="sel-link" onclick="setAllSources(false)">Clear all</span>
+                    </div>
+                    <div class="source-list" id="sourceList">
+                        <!-- filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Column picker -->
+                <div class="panel">
+                    <div class="panel-title">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                            <line x1="3" y1="12" x2="3.01" y2="12" />
+                            <line x1="3" y1="18" x2="3.01" y2="18" />
+                        </svg>
+                        Columns to Export
+                    </div>
+                    <div class="sel-all-row">
+                        <span class="sel-link" onclick="setAllCols(true)">Select all</span>
+                        <span class="sel-link" onclick="setAllCols(false)">Clear optional</span>
+                    </div>
+                    <div class="col-list" id="colList">
+                        <!-- filled by JS -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ─── Main content ──────────────────────────────────────────────────── -->
+            <div class="content">
+
+                <!-- Summary + search + export button -->
+                <div class="summary-bar">
+                    <div class="sum-stats">
+                        <div class="sum-item">
+                            <div class="sum-num" id="sumTotal">—</div>
+                            <div class="sum-label">Total Contacts</div>
+                        </div>
+                        <div class="sum-divider"></div>
+                        <div class="sum-item">
+                            <div class="sum-num" id="sumFiltered" style="color:var(--green)">—</div>
+                            <div class="sum-label">Will Export</div>
+                        </div>
+                        <div class="sum-divider"></div>
+                        <div class="sum-item">
+                            <div class="sum-num" id="sumCols" style="color:var(--blue)">—</div>
+                            <div class="sum-label">Columns</div>
+                        </div>
+                    </div>
+                    <div class="export-actions">
+                        <div class="search-wrap" style="width:220px">
+                            <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.35-4.35" />
+                            </svg>
+                            <input type="text" class="search-input" id="searchQ" placeholder="Search contacts…"
+                                oninput="applyFilters()">
+                        </div>
+                        <button class="btn btn-green" id="exportBtn" onclick="doExport()" disabled>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preview table -->
+                <div class="preview-panel" id="previewPanel">
+                    <div class="sbox">
+                        <div class="spin"></div>
+                        <p>Loading contacts…</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <script>
+        // ─────────────────────────────────────────────────────────────────────────────
+        var allContacts = [];
+        var filteredResult = [];
+
+        var STATUSES = ['New', 'Contacted', 'Qualified', 'Demo', 'Register', 'Won', 'Nurture'];
+        var STATUS_COLORS = {
+            New: '#71717a', Contacted: '#3b82f6', Qualified: '#eab308',
+            Demo: '#f97316', Register: '#22c55e', Won: '#16a34a', Nurture: '#a855f7'
+        };
+
+        var ALL_COLS = [
+            { key: 'name', label: 'Name', required: true },
+            { key: 'mobile', label: 'Mobile', required: true },
+            { key: 'company', label: 'Company', required: false },
+            { key: 'designation', label: 'Designation', required: false },
+            { key: 'email', label: 'Email', required: false },
+            { key: 'location', label: 'Location', required: false },
+            { key: 'status', label: 'Status', required: false },
+            { key: 'source', label: 'Source', required: false },
+            { key: 'link', label: 'Link', required: false },
+        ];
+
+        // ─── Fetch data ───────────────────────────────────────────────────────────────
+        async function loadContacts() {
+            try {
+                var res = await fetch('/api/crm', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fn: 'getAllData', args: [] })
+                });
+                var data = await res.json();
+                allContacts = (data.result && data.result.contacts) ? data.result.contacts : [];
+                buildSidebar();
+                applyFilters();
+            } catch (e) {
+                document.getElementById('previewPanel').innerHTML =
+                    '<div class="sbox"><p style="color:#dc2626">Failed to load: ' + escHtml(e.message) + '</p></div>';
+            }
+        }
+
+        // ─── Build sidebar ────────────────────────────────────────────────────────────
+        function buildSidebar() {
+            // Status list
+            var statCounts = {};
+            STATUSES.forEach(function (s) { statCounts[s] = 0; });
+            allContacts.forEach(function (c) { if (statCounts[c.status] !== undefined) statCounts[c.status]++; });
+
+            var statusHtml = '';
+            STATUSES.forEach(function (s) {
+                statusHtml +=
+                    '<div class="status-item">' +
+                    '<label>' +
+                    '<input type="checkbox" class="cb-status" value="' + s + '" checked onchange="applyFilters()">' +
+                    '<span class="status-dot" style="background:' + STATUS_COLORS[s] + '"></span>' +
+                    s +
+                    '</label>' +
+                    '<span class="status-count">' + statCounts[s] + '</span>' +
+                    '</div>';
+            });
+            document.getElementById('statusList').innerHTML = statusHtml;
+
+            // Source list (dynamic from data)
+            var sources = {};
+            allContacts.forEach(function (c) {
+                var s = c.source || '(No Source)';
+                sources[s] = (sources[s] || 0) + 1;
+            });
+            var srcKeys = Object.keys(sources).sort();
+            var srcHtml = '';
+            srcKeys.forEach(function (s) {
+                srcHtml +=
+                    '<div class="col-item">' +
+                    '<label>' +
+                    '<input type="checkbox" class="cb-source" value="' + escHtml(s) + '" checked onchange="applyFilters()">' +
+                    escHtml(s) +
+                    '</label>' +
+                    '<span class="col-required">' + sources[s] + '</span>' +
+                    '</div>';
+            });
+            document.getElementById('sourceList').innerHTML = srcHtml || '<div style="font-size:12px;color:var(--text-3)">No sources found</div>';
+
+            // Column picker
+            var colHtml = '';
+            ALL_COLS.forEach(function (col) {
+                colHtml +=
+                    '<div class="col-item">' +
+                    '<label>' +
+                    '<input type="checkbox" class="cb-col" value="' + col.key + '" ' + (col.required ? 'checked disabled' : 'checked') + ' onchange="applyFilters()">' +
+                    col.label +
+                    '</label>' +
+                    (col.required ? '<span class="col-required">required</span>' : '') +
+                    '</div>';
+            });
+            document.getElementById('colList').innerHTML = colHtml;
+        }
+
+        // ─── Filter helpers ───────────────────────────────────────────────────────────
+        function getCheckedValues(cls) {
+            var els = document.querySelectorAll('.' + cls + ':checked');
+            var vals = [];
+            els.forEach(function (el) { vals.push(el.value); });
+            return vals;
+        }
+
+        function setAllStatuses(checked) {
+            document.querySelectorAll('.cb-status').forEach(function (el) { el.checked = checked; });
+            applyFilters();
+        }
+        function setAllSources(checked) {
+            document.querySelectorAll('.cb-source').forEach(function (el) { el.checked = checked; });
+            applyFilters();
+        }
+        function setAllCols(checked) {
+            document.querySelectorAll('.cb-col:not([disabled])').forEach(function (el) { el.checked = checked; });
+            applyFilters();
+        }
+
+        // ─── Apply filters & rebuild preview ─────────────────────────────────────────
+        function applyFilters() {
+            var activeStatuses = new Set(getCheckedValues('cb-status'));
+            var activeSources = new Set(getCheckedValues('cb-source'));
+            var activeCols = getCheckedValues('cb-col');
+            var q = (document.getElementById('searchQ').value || '').toLowerCase().trim();
+
+            filteredResult = allContacts.filter(function (c) {
+                // Status filter
+                if (!activeStatuses.has(c.status)) return false;
+                // Source filter
+                var src = c.source || '(No Source)';
+                if (!activeSources.has(src)) return false;
+                // Search
+                if (q) {
+                    var haystack = [c.name, c.company, c.mobile, c.email, c.designation, c.location, c.status, c.source]
+                        .map(function (v) { return String(v || '').toLowerCase(); }).join(' ');
+                    if (haystack.indexOf(q) < 0) return false;
+                }
+                return true;
+            });
+
+            // Update summary
+            document.getElementById('sumTotal').textContent = allContacts.length;
+            document.getElementById('sumFiltered').textContent = filteredResult.length;
+            document.getElementById('sumCols').textContent = activeCols.length;
+
+            // Enable/disable export
+            var btn = document.getElementById('exportBtn');
+            btn.disabled = filteredResult.length === 0 || activeCols.length === 0;
+
+            renderPreview(filteredResult, activeCols);
+        }
+
+        // ─── Preview table ────────────────────────────────────────────────────────────
+        function renderPreview(contacts, colKeys) {
+            var panel = document.getElementById('previewPanel');
+
+            if (contacts.length === 0) {
+                panel.innerHTML =
+                    '<div class="sbox"><p>No contacts match your filters</p>' +
+                    '<small>Try selecting more statuses or clearing the search</small></div>';
+                return;
+            }
+
+            var cols = ALL_COLS.filter(function (c) { return colKeys.indexOf(c.key) >= 0; });
+            var preview = contacts.slice(0, 50);
+            var more = contacts.length > 50 ? contacts.length - 50 : 0;
+
+            var thead = '<tr>' + cols.map(function (c) { return '<th>' + c.label + '</th>'; }).join('') + '</tr>';
+            var tbody = '';
+            preview.forEach(function (c) {
+                tbody += '<tr>';
+                cols.forEach(function (col) {
+                    var val = c[col.key] || '';
+                    if (col.key === 'status' && val) {
+                        tbody += '<td><span class="status-pill s-' + escHtml(val) + '">' + escHtml(val) + '</span></td>';
+                    } else if (col.key === 'link' && val) {
+                        tbody += '<td><a href="' + escHtml(val) + '" target="_blank" style="color:var(--blue);font-size:12px">↗ Link</a></td>';
+                    } else {
+                        tbody += val
+                            ? '<td title="' + escHtml(val) + '">' + escHtml(val) + '</td>'
+                            : '<td class="td-empty">—</td>';
+                    }
+                });
+                tbody += '</tr>';
+            });
+
+            panel.innerHTML =
+                '<div class="preview-hd">' +
+                '<span class="preview-title">Preview</span>' +
+                '<span class="preview-meta">' +
+                'Showing ' + preview.length + ' of ' + contacts.length + ' contacts' +
+                (more > 0 ? ' · <strong>+' + more + ' more</strong> will be included in CSV' : '') +
+                '</span>' +
+                '</div>' +
+                '<div class="table-scroll">' +
+                '<table><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table>' +
+                '</div>';
+        }
+
+        // ─── Export ───────────────────────────────────────────────────────────────────
+        function doExport() {
+            var colKeys = getCheckedValues('cb-col');
+            var cols = ALL_COLS.filter(function (c) { return colKeys.indexOf(c.key) >= 0; });
+
+            if (filteredResult.length === 0) { toast('No contacts to export', true); return; }
+            if (cols.length === 0) { toast('Select at least one column', true); return; }
+
+            function csvCell(val) {
+                var s = String(val == null ? '' : val);
+                if (s.indexOf(',') >= 0 || s.indexOf('\n') >= 0 || s.indexOf('"') >= 0) {
+                    return '"' + s.replace(/"/g, '""') + '"';
+                }
+                return s;
+            }
+
+            var lines = [];
+            lines.push(cols.map(function (c) { return c.label; }).join(','));
+            filteredResult.forEach(function (c) {
+                lines.push(cols.map(function (col) { return csvCell(c[col.key] || ''); }).join(','));
+            });
+
+            var csv = '\uFEFF' + lines.join('\r\n'); // BOM for Excel UTF-8
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            var url = URL.createObjectURL(blob);
+
+            var now = new Date();
+            var stamp = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+
+            // Build descriptive filename
+            var activeStatuses = getCheckedValues('cb-status');
+            var scope = activeStatuses.length === STATUSES.length ? 'all'
+                : activeStatuses.length === 1 ? activeStatuses[0].toLowerCase()
+                    : 'filtered';
+            var fname = 'crm_export_' + scope + '_' + filteredResult.length + 'contacts_' + stamp + '.csv';
+
+            var a = document.createElement('a');
+            a.href = url; a.download = fname;
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            toast('✓ Exported ' + filteredResult.length + ' contacts (' + cols.length + ' columns)');
+        }
+
+        // ─── Utils ────────────────────────────────────────────────────────────────────
+        function toast(msg, isErr) {
+            var w = document.getElementById('toastWrap');
+            var t = document.createElement('div');
+            t.className = isErr ? 'toast err' : 'toast';
+            t.textContent = msg;
+            w.appendChild(t);
+            setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 3200);
+        }
+        function escHtml(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        window.onload = loadContacts;
+    </script>
+</body>
+
+</html>

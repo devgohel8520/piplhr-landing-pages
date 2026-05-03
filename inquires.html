@@ -1,0 +1,2800 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>CRM Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #f8f8f8;
+            --surface: #fff;
+            --border: #e4e4e7;
+            --border-light: #f4f4f5;
+            --text-1: #09090b;
+            --text-2: #71717a;
+            --text-3: #a1a1aa;
+            --accent: #18181b;
+            --accent-fg: #fafafa;
+            --ring: #d4d4d8;
+            --r: 8px;
+            --rl: 12px;
+            --sh1: 0 1px 2px rgba(0, 0, 0, .05);
+            --sh2: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .06);
+            --sh3: 0 4px 6px -1px rgba(0, 0, 0, .07), 0 2px 4px rgba(0, 0, 0, .05);
+            --sh4: 0 10px 15px -3px rgba(0, 0, 0, .08), 0 4px 6px rgba(0, 0, 0, .04);
+            --reminder-phone: #3b82f6;
+            --reminder-meeting: #f97316;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-1);
+            min-height: 100vh;
+            font-size: 14px;
+            line-height: 1.5
+        }
+
+        /* ─── Topbar ─────────────────────────────────────────────────────────────── */
+        .topbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            gap: 12px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 15px;
+            white-space: nowrap
+        }
+
+        .brand-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            flex-shrink: 0
+        }
+
+        #topCount {
+            font-size: 12px;
+            color: var(--text-3);
+            white-space: nowrap
+        }
+
+        /* ─── Main layout ────────────────────────────────────────────────────────── */
+        .main {
+            padding: 16px 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            width: 100%
+        }
+
+        /* ─── Stats grid ─────────────────────────────────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all .15s;
+            position: relative;
+            overflow: hidden;
+            user-select: none
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--sh3)
+        }
+
+        .stat-card:active {
+            transform: scale(.98)
+        }
+
+        .stat-card.active {
+            border-color: var(--accent);
+            background: var(--accent)
+        }
+
+        .stat-card.active .stat-label,
+        .stat-card.active .stat-num {
+            color: var(--accent-fg)
+        }
+
+        .stat-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--text-2);
+            margin-bottom: 6px
+        }
+
+        .stat-num {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-1);
+            line-height: 1
+        }
+
+        .stat-pip {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 0 0 var(--rl) var(--rl)
+        }
+
+        .pip-new {
+            background: #71717a
+        }
+
+        .pip-contacted {
+            background: #3b82f6
+        }
+
+        .pip-qualified {
+            background: #eab308
+        }
+
+        .pip-demo {
+            background: #f97316
+        }
+
+        .pip-register {
+            background: #22c55e
+        }
+
+        .pip-won {
+            background: #16a34a
+        }
+
+        .pip-nurture {
+            background: #a855f7
+        }
+
+        /* ─── Toolbar ────────────────────────────────────────────────────────────── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap
+        }
+
+        .toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--accent);
+            color: var(--accent-fg);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500
+        }
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 14px;
+            opacity: .7;
+            line-height: 1
+        }
+
+        .filter-chip button:hover {
+            opacity: 1
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+            max-width: 360px
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-1);
+            outline: none;
+            transition: border-color .15s
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, .08)
+        }
+
+        .search-input::placeholder {
+            color: var(--text-3)
+        }
+
+        /* ─── Buttons ────────────────────────────────────────────────────────────── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 7px 13px;
+            border-radius: var(--r);
+            border: 1px solid transparent;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+            white-space: nowrap;
+            text-decoration: none
+        }
+
+        .btn-default {
+            background: var(--surface);
+            color: var(--text-1);
+            border-color: var(--border)
+        }
+
+        .btn-default:hover {
+            background: var(--border-light);
+            border-color: var(--ring)
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--accent-fg)
+        }
+
+        .btn-primary:hover {
+            opacity: .88
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-2);
+            border-color: transparent
+        }
+
+        .btn-ghost:hover {
+            background: var(--border-light);
+            color: var(--text-1)
+        }
+
+        .btn-sm {
+            padding: 6px 11px;
+            font-size: 12px
+        }
+
+        .btn-route {
+            background: #16a34a;
+            color: #fff;
+            border-color: #16a34a
+        }
+
+        .btn-route:hover {
+            background: #15803d
+        }
+
+        .btn[disabled] {
+            opacity: .55;
+            cursor: not-allowed;
+            pointer-events: none
+        }
+
+        .btn-reminder {
+            position: relative
+        }
+
+        .reminder-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: #fff;
+            border-radius: 99px;
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 17px;
+            height: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            border: 2px solid var(--bg);
+            line-height: 1
+        }
+
+        .reminder-badge.hidden {
+            display: none
+        }
+
+        /* ─── Table ──────────────────────────────────────────────────────────────── */
+        .table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            overflow: visible;
+            box-shadow: var(--sh1)
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        thead {
+            background: var(--border-light);
+            border-bottom: 1px solid var(--border)
+        }
+
+        thead tr th:first-child {
+            border-top-left-radius: var(--rl)
+        }
+
+        thead tr th:last-child {
+            border-top-right-radius: var(--rl)
+        }
+
+        tbody tr:last-child td:first-child {
+            border-bottom-left-radius: var(--rl)
+        }
+
+        tbody tr:last-child td:last-child {
+            border-bottom-right-radius: var(--rl)
+        }
+
+        th {
+            padding: 10px 12px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--text-2);
+            white-space: nowrap
+        }
+
+        th.th-check {
+            width: 36px;
+            padding-right: 0
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        tbody tr:hover td {
+            background: #fafafa
+        }
+
+        .cname {
+            font-weight: 600;
+            font-size: 13.5px
+        }
+
+        .csub {
+            font-size: 12px;
+            color: var(--text-3);
+            margin-top: 1px
+        }
+
+        .status-sel {
+            appearance: none;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 4px 22px 4px 9px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-1);
+            outline: none;
+            transition: border-color .15s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a1a1aa'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 7px center
+        }
+
+        .status-sel:focus {
+            border-color: var(--accent)
+        }
+
+        .src-pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--border-light);
+            color: var(--text-2);
+            font-size: 11.5px;
+            font-weight: 500
+        }
+
+        .loc-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--text-2)
+        }
+
+        .loc-pill svg {
+            color: var(--text-3);
+            flex-shrink: 0
+        }
+
+        .link-ico {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: var(--r);
+            background: var(--border-light);
+            color: var(--text-2);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all .15s
+        }
+
+        .link-ico:hover {
+            background: var(--accent);
+            color: var(--accent-fg)
+        }
+
+        .row-cb {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--accent)
+        }
+
+        /* ─── Menu ───────────────────────────────────────────────────────────────── */
+        .menu-wrap {
+            position: relative;
+            display: inline-block
+        }
+
+        .menu-btn {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--r);
+            border: 1px solid transparent;
+            background: transparent;
+            cursor: pointer;
+            transition: all .15s;
+            color: var(--text-3)
+        }
+
+        .menu-btn:hover {
+            background: var(--border-light);
+            border-color: var(--border);
+            color: var(--text-1)
+        }
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 4px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--rl);
+            box-shadow: var(--sh4);
+            min-width: 185px;
+            z-index: 9999;
+            overflow: hidden;
+            animation: menuIn .1s ease
+        }
+
+        @keyframes menuIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px) scale(.97)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .dropdown.open {
+            display: block
+        }
+
+        .menu-sec {
+            padding: 8px 12px 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--text-3)
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            color: var(--text-1);
+            cursor: pointer;
+            transition: background .1s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit
+        }
+
+        .menu-item:hover {
+            background: var(--border-light)
+        }
+
+        .menu-item.danger {
+            color: #dc2626
+        }
+
+        .menu-item.danger:hover {
+            background: #fef2f2
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0
+        }
+
+        /* ─── Route selection bar ────────────────────────────────────────────────── */
+        .sel-bar {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--accent-fg);
+            border-radius: 40px;
+            padding: 10px 16px 10px 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+            z-index: 200;
+            align-items: center;
+            gap: 14px;
+            animation: barIn .2s ease;
+            white-space: nowrap
+        }
+
+        .sel-bar.show {
+            display: flex
+        }
+
+        @keyframes barIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0)
+            }
+        }
+
+        .sel-bar-count {
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .sel-bar-btns {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .sel-bar-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: none;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s
+        }
+
+        .sel-bar-route {
+            background: #22c55e;
+            color: #fff
+        }
+
+        .sel-bar-route:hover {
+            background: #16a34a
+        }
+
+        .sel-bar-clear {
+            background: rgba(255, 255, 255, .15);
+            color: var(--accent-fg)
+        }
+
+        .sel-bar-clear:hover {
+            background: rgba(255, 255, 255, .25)
+        }
+
+        /* ─── Modal ──────────────────────────────────────────────────────────────── */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .45);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 16px
+        }
+
+        .modal.open {
+            display: flex
+        }
+
+        .modal-box {
+            background: var(--surface);
+            border-radius: var(--rl);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--sh4);
+            animation: modalIn .18s ease
+        }
+
+        .modal-box.wide {
+            max-width: 600px
+        }
+
+        .modal-box.xl {
+            max-width: 680px
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.96) translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0)
+            }
+        }
+
+        .modal-hd {
+            padding: 20px 22px 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 600
+        }
+
+        .modal-sub {
+            font-size: 12px;
+            color: var(--text-2);
+            margin-top: 2px
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--r);
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: var(--text-3);
+            font-size: 18px;
+            transition: all .15s;
+            flex-shrink: 0;
+            margin-left: 8px
+        }
+
+        .modal-close:hover {
+            background: var(--border-light);
+            color: var(--text-1)
+        }
+
+        .modal-body {
+            padding: 18px 22px 22px
+        }
+
+        .fg {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px
+        }
+
+        .fg-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .fg-full {
+            grid-column: 1/-1
+        }
+
+        .flabel {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text-2)
+        }
+
+        .fctl {
+            padding: 8px 11px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-1);
+            background: var(--surface);
+            outline: none;
+            transition: border-color .15s;
+            width: 100%
+        }
+
+        .fctl:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, .08)
+        }
+
+        textarea.fctl {
+            min-height: 90px;
+            resize: vertical;
+            line-height: 1.6
+        }
+
+        .mfoot {
+            display: flex;
+            gap: 10px;
+            padding-top: 14px
+        }
+
+        .mfoot .btn {
+            flex: 1;
+            justify-content: center
+        }
+
+        /* ─── Pagination ─────────────────────────────────────────────────────────── */
+        .pg-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            background: var(--border-light);
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .pg-info {
+            font-size: 12px;
+            color: var(--text-3)
+        }
+
+        .pg-btns {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .pg-btn {
+            padding: 5px 10px;
+            border-radius: var(--r);
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .15s;
+            color: var(--text-1)
+        }
+
+        .pg-btn:hover:not([disabled]) {
+            border-color: var(--accent)
+        }
+
+        .pg-btn[disabled] {
+            opacity: .4;
+            cursor: not-allowed
+        }
+
+        .pg-btn.cur {
+            background: var(--accent);
+            color: var(--accent-fg);
+            border-color: var(--accent)
+        }
+
+        /* ─── Remarks / reminder cards ───────────────────────────────────────────── */
+        .rlist,
+        .all-rlist,
+        .reminder-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 2px
+        }
+
+        .rcard {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 12px 14px;
+            border-left: 3px solid var(--accent)
+        }
+
+        .rcard-hd {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            gap: 8px
+        }
+
+        .rtag {
+            display: inline-flex;
+            align-items: center;
+            background: var(--border-light);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2px 9px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-1);
+            white-space: nowrap
+        }
+
+        .rtext {
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text-1)
+        }
+
+        .rdate {
+            font-size: 11px;
+            color: var(--text-3);
+            margin-top: 5px
+        }
+
+        .rago {
+            font-size: 11px;
+            color: var(--text-3);
+            white-space: nowrap
+        }
+
+        .ar-search {
+            position: relative;
+            margin-bottom: 12px
+        }
+
+        .ar-search svg {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-3);
+            pointer-events: none
+        }
+
+        .ar-search input {
+            width: 100%;
+            padding: 8px 12px 8px 34px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-1);
+            background: var(--surface);
+            outline: none;
+            transition: border-color .15s
+        }
+
+        .ar-search input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(24, 24, 27, .08)
+        }
+
+        .ar-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: var(--text-3)
+        }
+
+        .rem-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            padding: 13px 15px;
+            position: relative;
+            transition: box-shadow .15s
+        }
+
+        .rem-card:hover {
+            box-shadow: var(--sh2)
+        }
+
+        .rem-card.type-phone {
+            border-left: 3px solid var(--reminder-phone)
+        }
+
+        .rem-card.type-meeting {
+            border-left: 3px solid var(--reminder-meeting)
+        }
+
+        .rem-card.status-completed {
+            opacity: .6
+        }
+
+        .rem-card-hd {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px
+        }
+
+        .rem-contact {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-1)
+        }
+
+        .rem-badges {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap
+        }
+
+        .rem-type-pill,
+        .rem-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .rem-type-pill.phone {
+            background: #eff6ff;
+            color: #1d4ed8
+        }
+
+        .rem-type-pill.meeting {
+            background: #fff7ed;
+            color: #c2410c
+        }
+
+        .rem-status-pill.pending {
+            background: #fefce8;
+            color: #a16207
+        }
+
+        .rem-status-pill.completed {
+            background: #f0fdf4;
+            color: #15803d
+        }
+
+        .rem-datetime {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--text-2);
+            margin-bottom: 6px
+        }
+
+        .rem-agenda {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--text-1)
+        }
+
+        .rem-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-light);
+            flex-wrap: wrap
+        }
+
+        .rem-btn {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+            color: var(--text-2)
+        }
+
+        .rem-btn:hover {
+            background: var(--border-light);
+            color: var(--text-1)
+        }
+
+        .rem-btn.complete-btn {
+            background: #f0fdf4;
+            border-color: #86efac;
+            color: #15803d
+        }
+
+        .rem-btn.complete-btn:hover {
+            background: #dcfce7
+        }
+
+        .rem-btn.danger-btn {
+            color: #dc2626
+        }
+
+        .rem-btn.danger-btn:hover {
+            background: #fef2f2;
+            border-color: #fca5a5
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2px;
+            background: var(--border-light);
+            border-radius: var(--r);
+            padding: 3px;
+            margin-bottom: 16px
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 7px 12px;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            color: var(--text-2);
+            transition: all .15s;
+            white-space: nowrap
+        }
+
+        .tab-btn.active {
+            background: var(--surface);
+            color: var(--text-1);
+            font-weight: 600;
+            box-shadow: var(--sh1)
+        }
+
+        .overdue-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            background: #ef4444;
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: pulse 1.5s ease-in-out infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        .rem-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-3)
+        }
+
+        .rem-empty-icon {
+            font-size: 32px;
+            margin-bottom: 10px
+        }
+
+        .rem-empty p {
+            font-size: 13.5px;
+            margin-bottom: 4px;
+            color: var(--text-2)
+        }
+
+        /* ─── Reminder type toggle ───────────────────────────────────────────────── */
+        .type-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 0
+        }
+
+        .type-btn {
+            flex: 1;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--r);
+            background: var(--surface);
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+            text-align: center;
+            color: var(--text-2)
+        }
+
+        .type-btn:hover {
+            border-color: var(--ring)
+        }
+
+        .type-btn.selected-phone {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+            font-weight: 600
+        }
+
+        .type-btn.selected-meeting {
+            background: #fff7ed;
+            border-color: #f97316;
+            color: #c2410c;
+            font-weight: 600
+        }
+
+        /* ─── State boxes ────────────────────────────────────────────────────────── */
+        .sbox {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-3)
+        }
+
+        .sbox p {
+            font-size: 14px;
+            margin-bottom: 6px
+        }
+
+        .sbox small {
+            font-size: 12px
+        }
+
+        .spin {
+            width: 26px;
+            height: 26px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            margin: 0 auto 12px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* ─── Toast ──────────────────────────────────────────────────────────────── */
+        .toast-wrap {
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .toast {
+            background: var(--accent);
+            color: var(--accent-fg);
+            padding: 10px 16px;
+            border-radius: var(--r);
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: var(--sh4);
+            animation: toastIn .2s ease;
+            max-width: 300px
+        }
+
+        .toast.err {
+            background: #dc2626
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* ─── Progress overlay ───────────────────────────────────────────────────── */
+        .progress-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 9, 11, .55);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px)
+        }
+
+        .progress-overlay.show {
+            display: flex
+        }
+
+        .progress-card {
+            background: var(--surface);
+            border-radius: var(--rl);
+            padding: 28px 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--sh4);
+            min-width: 180px;
+            animation: modalIn .18s ease
+        }
+
+        .progress-ring {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin .65s linear infinite
+        }
+
+        .progress-label {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-2);
+            letter-spacing: .01em
+        }
+
+        .progress-dots::after {
+            content: '';
+            animation: dots 1.2s steps(4, end) infinite
+        }
+
+        @keyframes dots {
+            0% {
+                content: ''
+            }
+
+            25% {
+                content: '.'
+            }
+
+            50% {
+                content: '..'
+            }
+
+            75% {
+                content: '...'
+            }
+
+            100% {
+                content: ''
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--ring);
+            border-radius: 99px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-3)
+        }
+
+        /* ════════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ════════════════════════════════════════════════════════════════════════════ */
+
+        /* ─── Tablet (≤1100px) ───────────────────────────────────────────────────── */
+        @media (max-width:1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        /* ─── Small tablet / large phone (≤768px) ────────────────────────────────── */
+        @media (max-width:768px) {
+            .main {
+                padding: 12px 14px
+            }
+
+            .topbar {
+                padding: 0 14px;
+                height: 48px
+            }
+
+            .brand {
+                font-size: 14px
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                margin-bottom: 16px
+            }
+
+            .stat-num {
+                font-size: 22px
+            }
+
+            .stat-card {
+                padding: 12px
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px
+            }
+
+            .toolbar-left {
+                flex-wrap: wrap
+            }
+
+            .toolbar-right {
+                flex-wrap: wrap
+            }
+
+            .search-wrap {
+                max-width: none;
+                width: 100%;
+                order: -1
+            }
+
+            .section-title {
+                font-size: 14px
+            }
+
+            /* Table → Card layout */
+            .table-wrap {
+                background: transparent;
+                border: none;
+                box-shadow: none;
+                overflow: visible
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                display: block;
+                width: 100%
+            }
+
+            thead {
+                display: none
+            }
+
+            tbody tr {
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: var(--rl);
+                margin-bottom: 10px;
+                padding: 14px;
+                box-shadow: var(--sh1);
+            }
+
+            tbody tr:hover td {
+                background: transparent
+            }
+
+            tbody tr:last-child td {
+                border-bottom: none
+            }
+
+            td {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                border: none;
+                padding: 5px 0;
+                border-bottom: 1px solid var(--border-light) !important;
+                font-size: 13px;
+            }
+
+            td:last-child {
+                border-bottom: none !important;
+                padding-top: 10px
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-size: 10.5px;
+                font-weight: 700;
+                color: var(--text-3);
+                text-transform: uppercase;
+                letter-spacing: .06em;
+                min-width: 80px;
+                padding-top: 2px;
+                flex-shrink: 0;
+            }
+
+            td[data-label=""]::before {
+                display: none
+            }
+
+            td[data-label=""] {
+                justify-content: flex-end
+            }
+
+            td[data-label="CB"]::before {
+                display: none
+            }
+
+            td[data-label="CB"] {
+                justify-content: flex-start;
+                border-bottom: none !important;
+                padding-bottom: 0;
+                padding-top: 0
+            }
+
+            .status-sel {
+                max-width: 160px
+            }
+
+            /* Modals full-width on mobile */
+            .modal {
+                padding: 0;
+                align-items: flex-end
+            }
+
+            .modal-box {
+                max-width: 100%;
+                border-radius: var(--rl) var(--rl) 0 0;
+                max-height: 92vh
+            }
+
+            .modal-box.wide,
+            .modal-box.xl {
+                max-width: 100%
+            }
+
+            .fg-grid {
+                grid-template-columns: 1fr
+            }
+
+            .fg-full {
+                grid-column: auto
+            }
+
+            /* Pagination compact */
+            .pg-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 10px 12px
+            }
+
+            .pg-btns {
+                flex-wrap: wrap
+            }
+        }
+
+        /* ─── Mobile phone (≤480px) ──────────────────────────────────────────────── */
+        @media (max-width:480px) {
+            .stats-grid {
+                display: flex;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 4px;
+                margin-bottom: 14px;
+                scrollbar-width: none;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .stats-grid::-webkit-scrollbar {
+                display: none
+            }
+
+            .stat-card {
+                min-width: 90px;
+                flex-shrink: 0;
+                padding: 11px 12px
+            }
+
+            .stat-num {
+                font-size: 20px
+            }
+
+            .stat-label {
+                font-size: 9px
+            }
+
+            .btn-sm {
+                padding: 6px 10px;
+                font-size: 11.5px
+            }
+
+            .modal-body {
+                padding: 14px 16px 18px
+            }
+
+            .modal-hd {
+                padding: 16px 16px 0
+            }
+
+            .sel-bar {
+                bottom: 12px;
+                width: calc(100% - 24px);
+                max-width: none;
+                border-radius: var(--rl);
+                flex-wrap: wrap;
+                gap: 8px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div style="display:flex;flex-direction:column;min-height:100vh">
+        <header class="topbar">
+            <div class="brand"><span class="brand-dot"></span> CRM &middot; Piplhr</div>
+            <div id="topCount"></div>
+        </header>
+
+        <main class="main">
+            <div class="stats-grid">
+                <div class="stat-card" onclick="filterBy('New')" id="card-New">
+                    <div class="stat-label">New</div>
+                    <div class="stat-num" id="sn-New">0</div>
+                    <div class="stat-pip pip-new"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Nurture')" id="card-Nurture">
+                    <div class="stat-label">Nurture</div>
+                    <div class="stat-num" id="sn-Nurture">0</div>
+                    <div class="stat-pip pip-nurture"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Contacted')" id="card-Contacted">
+                    <div class="stat-label">Contacted</div>
+                    <div class="stat-num" id="sn-Contacted">0</div>
+                    <div class="stat-pip pip-contacted"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Qualified')" id="card-Qualified">
+                    <div class="stat-label">Qualified</div>
+                    <div class="stat-num" id="sn-Qualified">0</div>
+                    <div class="stat-pip pip-qualified"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Demo')" id="card-Demo">
+                    <div class="stat-label">Demo</div>
+                    <div class="stat-num" id="sn-Demo">0</div>
+                    <div class="stat-pip pip-demo"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Register')" id="card-Register">
+                    <div class="stat-label">Register</div>
+                    <div class="stat-num" id="sn-Register">0</div>
+                    <div class="stat-pip pip-register"></div>
+                </div>
+                <div class="stat-card" onclick="filterBy('Won')" id="card-Won">
+                    <div class="stat-label">Won</div>
+                    <div class="stat-num" id="sn-Won">0</div>
+                    <div class="stat-pip pip-won"></div>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="toolbar-left">
+                    <span class="section-title">Contacts</span>
+                    <span class="filter-chip" id="fchip" style="display:none"><span id="fchipTxt"></span><button
+                            onclick="clearAll()">&#215;</button></span>
+                </div>
+                <div class="search-wrap">
+                    <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="searchQ" class="search-input" placeholder="Search name, company, location..."
+                        oninput="handleSearch()">
+                </div>
+                <div class="toolbar-right">
+                    <button class="btn btn-default btn-sm" onclick="clearAll()">Clear</button>
+                    <button class="btn btn-default btn-sm" onclick="openAllRemarks()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        Remarks
+                    </button>
+                    <button class="btn btn-default btn-sm btn-reminder" onclick="openAllReminders()" id="remindersBtn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        Reminders
+                        <span class="reminder-badge hidden" id="reminderBadge">0</span>
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="openAddModal()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Add Contact
+                    </button>
+                </div>
+            </div>
+
+            <div id="tbl">
+                <div class="table-wrap">
+                    <div class="sbox">
+                        <div class="spin"></div>
+                        <p>Loading contacts...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ─── Selection / Route bar ─────────────────────────────────────────────── -->
+    <div class="sel-bar" id="selBar">
+        <span class="sel-bar-count" id="selCount">0 selected</span>
+        <div class="sel-bar-btns">
+            <button class="sel-bar-btn sel-bar-route" id="routeBtn" onclick="planRoute()">🗺 Plan Route</button>
+            <button class="sel-bar-btn sel-bar-clear" onclick="clearSelection()">✕ Clear</button>
+        </div>
+    </div>
+
+    <div class="toast-wrap" id="toastWrap"></div>
+
+    <!-- PROGRESS OVERLAY -->
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-card">
+            <div class="progress-ring"></div>
+            <div class="progress-label"><span id="progressMsg">Saving</span><span class="progress-dots"></span></div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════ ADD MODAL ═══════════════════════════════ -->
+    <div class="modal" id="addModal">
+        <div class="modal-box">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Add Contact</div>
+                </div><button class="modal-close" onclick="closeModal('addModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <div class="fg-grid">
+                    <div class="fg"><label class="flabel">Name *</label><input id="a-name" class="fctl" type="text"
+                            placeholder="Full name"></div>
+                    <div class="fg"><label class="flabel">Mobile</label><input id="a-mobile" class="fctl" type="tel"
+                            placeholder="+91 98765 43210"></div>
+                    <div class="fg"><label class="flabel">Company</label><input id="a-company" class="fctl" type="text">
+                    </div>
+                    <div class="fg"><label class="flabel">Designation</label><input id="a-designation" class="fctl"
+                            type="text"></div>
+                    <div class="fg fg-full"><label class="flabel">Email</label><input id="a-email" class="fctl"
+                            type="email" placeholder="email@example.com"></div>
+                    <div class="fg fg-full">
+                        <label class="flabel">Location (City / Area)</label>
+                        <input id="a-location" class="fctl" type="text" placeholder="e.g. Rajkot, Surat, Ahmedabad...">
+                    </div>
+                    <div class="fg">
+                        <label class="flabel">Status</label>
+                        <select id="a-status" class="fctl">
+                            <option value="New">New</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Qualified">Qualified</option>
+                            <option value="Demo">Demo</option>
+                            <option value="Register">Register</option>
+                            <option value="Won">Won</option>
+                            <option value="Nurture">Nurture</option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label class="flabel">Source</label>
+                        <select id="a-source" class="fctl">
+                            <option value="">Select source</option>
+                            <option value="Inbound">Inbound</option>
+                            <option value="Outbound">Outbound</option>
+                            <option value="Reference">Reference</option>
+                            <option value="BNI">BNI</option>
+                            <option value="Smmart">Smmart</option>
+                            <option value="Rahul Malodia">Rahul Malodia</option>
+                            <option value="Rajiv">Rajiv</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                            <option value="Hiring">Hiring</option>
+                        </select>
+                    </div>
+                    <div class="fg fg-full"><label class="flabel">Link (URL)</label><input id="a-link" class="fctl"
+                            type="url" placeholder="https://"></div>
+                </div>
+                <div class="mfoot"><button class="btn btn-default"
+                        onclick="closeModal('addModal')">Cancel</button><button class="btn btn-primary"
+                        onclick="addContact()">Add Contact</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════ EDIT MODAL ══════════════════════════════ -->
+    <div class="modal" id="editModal">
+        <div class="modal-box">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Edit Contact</div>
+                </div><button class="modal-close" onclick="closeModal('editModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="e-row">
+                <div class="fg-grid">
+                    <div class="fg"><label class="flabel">Name *</label><input id="e-name" class="fctl" type="text">
+                    </div>
+                    <div class="fg"><label class="flabel">Mobile</label><input id="e-mobile" class="fctl" type="tel">
+                    </div>
+                    <div class="fg"><label class="flabel">Company</label><input id="e-company" class="fctl" type="text">
+                    </div>
+                    <div class="fg"><label class="flabel">Designation</label><input id="e-designation" class="fctl"
+                            type="text"></div>
+                    <div class="fg fg-full"><label class="flabel">Email</label><input id="e-email" class="fctl"
+                            type="email"></div>
+                    <div class="fg fg-full">
+                        <label class="flabel">Location (City / Area)</label>
+                        <input id="e-location" class="fctl" type="text" placeholder="e.g. Rajkot, Surat, Ahmedabad...">
+                    </div>
+                    <div class="fg">
+                        <label class="flabel">Status</label>
+                        <select id="e-status" class="fctl">
+                            <option value="New">New</option>
+                            <option value="Contacted">Contacted</option>
+                            <option value="Qualified">Qualified</option>
+                            <option value="Demo">Demo</option>
+                            <option value="Register">Register</option>
+                            <option value="Won">Won</option>
+                            <option value="Nurture">Nurture</option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label class="flabel">Source</label>
+                        <select id="e-source" class="fctl">
+                            <option value="">Select source</option>
+                            <option value="Inbound">Inbound</option>
+                            <option value="Outbound">Outbound</option>
+                            <option value="Reference">Reference</option>
+                            <option value="BNI">BNI</option>
+                            <option value="Smmart">Smmart</option>
+                            <option value="Rahul Malodia">Rahul Malodia</option>
+                            <option value="Rajiv">Rajiv</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                            <option value="Hiring">Hiring</option>
+                        </select>
+                    </div>
+                    <div class="fg fg-full"><label class="flabel">Link (URL)</label><input id="e-link" class="fctl"
+                            type="url"></div>
+                </div>
+                <div class="mfoot"><button class="btn btn-default"
+                        onclick="closeModal('editModal')">Cancel</button><button class="btn btn-primary"
+                        onclick="updateContact()">Save Changes</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════ REMARK MODAL ════════════════════════════════ -->
+    <div class="modal" id="remarkModal">
+        <div class="modal-box">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Add Remark</div>
+                </div><button class="modal-close" onclick="closeModal('remarkModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="r-row">
+                <input type="hidden" id="r-name">
+                <div class="fg"><label class="flabel">Contact</label>
+                    <div style="font-weight:600;font-size:13px" id="r-display"></div>
+                </div>
+                <div class="fg"><label class="flabel">Remark *</label><textarea id="r-text" class="fctl"
+                        placeholder="Write your note or follow-up details..."></textarea></div>
+                <div class="fg">
+                    <label class="flabel">Image</label>
+                    <input type="file" id="r-image" class="fctl" accept="image/*">
+                    <input type="hidden" id="r-image-data">
+                </div>
+                <div class="mfoot"><button class="btn btn-default"
+                        onclick="closeModal('remarkModal')">Cancel</button><button class="btn btn-primary"
+                        onclick="submitRemark()">Save Remark</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════ VIEW REMARKS MODAL ══════════════════════════ -->
+    <div class="modal" id="viewRemarksModal">
+        <div class="modal-box wide">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Remarks History</div>
+                    <div class="modal-sub" id="vr-name"></div>
+                </div><button class="modal-close" onclick="closeModal('viewRemarksModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <div id="vrList">
+                    <div class="sbox" style="padding:30px">
+                        <div class="spin"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════ IMAGE PREVIEW MODAL ═══════════════════════════ -->
+    <div class="modal" id="imgPreviewModal" style="z-index:1000">
+        <div class="modal-box" style="max-width:90vw;max-height:90vh">
+            <div class="modal-hd">
+                <div class="modal-title">Image Preview</div>
+                <button class="modal-close" onclick="closeModal('imgPreviewModal')">&#215;</button>
+            </div>
+            <div class="modal-body" style="padding:10px;text-align:center">
+                <img id="imgPreviewSrc" style="max-width:100%;max-height:80vh;object-fit:contain">
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════ ALL REMARKS MODAL ═══════════════════════════ -->
+    <div class="modal" id="allRemarksModal">
+        <div class="modal-box xl">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">All Remarks</div>
+                    <div class="modal-sub">Latest activity across all contacts</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('allRemarksModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <div class="ar-search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="arSearch" placeholder="Filter by contact name or remark..."
+                        oninput="filterAllRemarks()">
+                </div>
+                <div class="ar-meta">
+                    <span id="arMeta">Loading...</span>
+                    <button class="btn btn-ghost btn-sm" onclick="loadAllRemarks()"
+                        style="padding:3px 8px;font-size:11px">&#8635; Refresh</button>
+                </div>
+                <div id="arList" class="all-rlist">
+                    <div class="sbox" style="padding:40px">
+                        <div class="spin"></div>
+                        <p>Fetching remarks...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════ SET REMINDER MODAL ═══════════════════════════ -->
+    <div class="modal" id="setReminderModal">
+        <div class="modal-box">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Set Reminder</div>
+                    <div class="modal-sub" id="rem-contact-display"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal('setReminderModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="rem-row">
+                <input type="hidden" id="rem-contact-name">
+                <div class="fg">
+                    <label class="flabel">Reminder Type *</label>
+                    <div class="type-toggle">
+                        <button class="type-btn selected-phone" id="type-phone-btn"
+                            onclick="selectReminderType('Phone')">📞 Phone Call</button>
+                        <button class="type-btn" id="type-meeting-btn" onclick="selectReminderType('Meeting')">🤝
+                            Meeting</button>
+                    </div>
+                    <input type="hidden" id="rem-type" value="Phone">
+                </div>
+                <div class="fg-grid">
+                    <div class="fg"><label class="flabel">Date *</label><input id="rem-date" class="fctl" type="date">
+                    </div>
+                    <div class="fg"><label class="flabel">Time *</label><input id="rem-time" class="fctl" type="time">
+                    </div>
+                    <div class="fg fg-full"><label class="flabel">Agenda *</label><textarea id="rem-agenda" class="fctl"
+                            placeholder="What do you plan to discuss?"></textarea></div>
+                </div>
+                <div class="mfoot">
+                    <button class="btn btn-default" onclick="closeModal('setReminderModal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="submitReminder()">Set Reminder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════ VIEW CONTACT REMINDERS MODAL ════════════════════ -->
+    <div class="modal" id="viewRemindersModal">
+        <div class="modal-box wide">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">Reminders</div>
+                    <div class="modal-sub" id="vrem-name"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal('viewRemindersModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <div id="vremList">
+                    <div class="sbox" style="padding:30px">
+                        <div class="spin"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════ ALL REMINDERS MODAL ═════════════════════════ -->
+    <div class="modal" id="allRemindersModal">
+        <div class="modal-box xl">
+            <div class="modal-hd">
+                <div>
+                    <div class="modal-title">All Reminders</div>
+                    <div class="modal-sub">Scheduled calls &amp; meetings</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('allRemindersModal')">&#215;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab-btn active" id="tab-upcoming" onclick="switchReminderTab('upcoming')">⏰
+                        Upcoming</button>
+                    <button class="tab-btn" id="tab-all-rem" onclick="switchReminderTab('all')">📋 All</button>
+                    <button class="tab-btn" id="tab-completed" onclick="switchReminderTab('completed')">✅
+                        Completed</button>
+                    <button class="tab-btn" id="tab-cancelled" onclick="switchReminderTab('cancelled')">❌
+                        Cancelled</button>
+                </div>
+                <div class="ar-search">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8" />
+                        <path d="m21 21-4.35-4.35" />
+                    </svg>
+                    <input type="text" id="remSearch" placeholder="Filter by contact or agenda..."
+                        oninput="filterRemindersDisplay()">
+                </div>
+                <div class="ar-meta">
+                    <span id="remMeta">Loading...</span>
+                    <button class="btn btn-ghost btn-sm" onclick="loadAllReminders()"
+                        style="padding:3px 8px;font-size:11px">&#8635; Refresh</button>
+                </div>
+                <div id="remList" class="reminder-list">
+                    <div class="sbox" style="padding:40px">
+                        <div class="spin"></div>
+                        <p>Fetching...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ─────────────────────────────────────────────────────────────────────────────
+        // CONFIG — for Vercel deployment, set window.CRM_API_URL = '/api/crm' before
+        // this script loads, e.g. in a <script> tag above this file or via config.js
+        // ─────────────────────────────────────────────────────────────────────────────
+        window.CRM_API_URL = '/api/crm';
+
+        var allContacts = [];
+        var filteredContacts = [];
+        var contactMap = {};
+        var currentFilter = null;
+        var searchQuery = '';
+        var currentPage = 1;
+        var PAGE_SIZE = 15;
+        var allRemarksCache = [];
+        var allRemindersCache = [];
+        var currentReminderTab = 'upcoming';
+        var selectedRows = new Set();
+        var STATUSES = ['New', 'Contacted', 'Qualified', 'Demo', 'Register', 'Won', 'Nurture'];
+
+        // ─── Dual-mode API wrapper ────────────────────────────────────────────────────
+        // Works in Google Apps Script (google.script.run) AND standalone/Vercel (fetch)
+        function gas(fn, args, ok, fail, progressMsg, btnEl) {
+            if (progressMsg) showProgress(progressMsg);
+            if (btnEl) { btnEl.disabled = true; btnEl._ot = btnEl.textContent; btnEl.textContent = 'Please wait…'; }
+
+            function onOk(result) {
+                hideProgress();
+                if (btnEl) { btnEl.disabled = false; btnEl.textContent = btnEl._ot; }
+                if (ok) ok(result);
+            }
+            function onFail(e) {
+                hideProgress();
+                if (btnEl) { btnEl.disabled = false; btnEl.textContent = btnEl._ot; }
+                if (fail) fail(e); else toast((e && e.message) || 'Error occurred', true);
+            }
+
+            // Google Apps Script mode
+            if (typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run
+                    .withSuccessHandler(onOk)
+                    .withFailureHandler(onFail)
+                [fn].apply(google.script.run, args || []);
+                return;
+            }
+
+            // Fetch / Vercel mode
+            var apiUrl = (window.CRM_API_URL || '/api/crm');
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fn: fn, args: args || [] })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data && data.error) onFail({ message: data.error });
+                    else onOk(data && data.result !== undefined ? data.result : data);
+                })
+                .catch(onFail);
+        }
+
+        // ─── Utilities ────────────────────────────────────────────────────────────────
+        function toast(msg, isErr) {
+            var w = document.getElementById('toastWrap');
+            var t = document.createElement('div');
+            t.className = isErr ? 'toast err' : 'toast';
+            t.textContent = msg;
+            w.appendChild(t);
+            setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 3200);
+        }
+        function showProgress(msg) {
+            document.getElementById('progressMsg').textContent = msg || 'Saving';
+            document.getElementById('progressOverlay').classList.add('show');
+        }
+        function hideProgress() { document.getElementById('progressOverlay').classList.remove('show'); }
+        function esc(s) {
+            return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        function timeAgo(date) {
+            var d = Math.floor((Date.now() - date.getTime()) / 1000);
+            if (d < 60) return 'just now';
+            if (d < 3600) return Math.floor(d / 60) + 'm ago';
+            if (d < 86400) return Math.floor(d / 3600) + 'h ago';
+            if (d < 2592000) return Math.floor(d / 86400) + 'd ago';
+            return Math.floor(d / 2592000) + 'mo ago';
+        }
+        function fmtDateOnly(dateStr) {
+            try {
+                var p = String(dateStr).split('-');
+                if (p.length === 3) {
+                    var m = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    return p[2] + ' ' + m[parseInt(p[1]) - 1] + ' ' + p[0];
+                }
+                return dateStr;
+            } catch (e) { return dateStr; }
+        }
+        function isOverdue(dateStr, timeStr, statusVal) {
+            if (statusVal === 'Completed') return false;
+            try {
+                return new Date(dateStr + 'T' + (timeStr || '23:59') + ':00') < new Date();
+            } catch (e) { return false; }
+        }
+
+        // ─── Load & Render ────────────────────────────────────────────────────────────
+        function loadData() {
+            document.getElementById('tbl').innerHTML =
+                '<div class="table-wrap"><div class="sbox"><div class="spin"></div><p>Loading contacts…</p></div></div>';
+            gas('getAllData', [], function (data) {
+                allContacts = data.contacts;
+                updateStats(data.stats);
+                applyFilters();
+                document.getElementById('topCount').textContent = allContacts.length + ' contacts';
+                refreshReminderBadge();
+            }, function (e) {
+                document.getElementById('tbl').innerHTML =
+                    '<div class="table-wrap"><div class="sbox"><p style="color:#dc2626">Error: ' + esc(e.message) + '</p><small>Check sheet permissions.</small></div></div>';
+            });
+        }
+
+        function refreshReminderBadge() {
+            gas('getAllReminders', [], function (list) {
+                var pending = (list || []).filter(function (r) { return r.status !== 'Completed'; });
+                var badge = document.getElementById('reminderBadge');
+                if (pending.length > 0) { badge.textContent = pending.length; badge.classList.remove('hidden'); }
+                else badge.classList.add('hidden');
+            });
+        }
+
+        function updateStats(s) {
+            for (var i = 0; i < STATUSES.length; i++) {
+                var el = document.getElementById('sn-' + STATUSES[i]);
+                if (el) el.textContent = (s[STATUSES[i]] || 0);
+            }
+        }
+
+        function filterBy(status) {
+            currentFilter = currentFilter === status ? null : status;
+            applyFilters();
+        }
+        function handleSearch() { searchQuery = document.getElementById('searchQ').value; applyFilters(); }
+        function clearAll() {
+            document.getElementById('searchQ').value = ''; searchQuery = ''; currentFilter = null;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            filteredContacts = allContacts.slice();
+            if (currentFilter) filteredContacts = filteredContacts.filter(function (c) { return c.status === currentFilter; });
+            if (searchQuery) {
+                var q = searchQuery.toLowerCase();
+                filteredContacts = filteredContacts.filter(function (c) {
+                    var fields = [c.name, c.company, c.mobile, c.email, c.designation, c.status, c.source, c.location];
+                    for (var i = 0; i < fields.length; i++) {
+                        if (fields[i] && String(fields[i]).toLowerCase().indexOf(q) >= 0) return true;
+                    }
+                    return false;
+                });
+            }
+            currentPage = 1;
+            clearSelection();
+            renderTable();
+            updateChip();
+        }
+
+        function updateChip() {
+            var cards = document.querySelectorAll('.stat-card');
+            for (var i = 0; i < cards.length; i++) cards[i].classList.remove('active');
+            var chip = document.getElementById('fchip');
+            if (currentFilter) {
+                var card = document.getElementById('card-' + currentFilter);
+                if (card) card.classList.add('active');
+                chip.style.display = '';
+                document.getElementById('fchipTxt').textContent = currentFilter + ' (' + filteredContacts.length + ')';
+            } else if (searchQuery) {
+                chip.style.display = '';
+                document.getElementById('fchipTxt').textContent = 'Search (' + filteredContacts.length + ')';
+            } else {
+                chip.style.display = 'none';
+            }
+        }
+
+        function renderTable() {
+            contactMap = {};
+            for (var ci = 0; ci < allContacts.length; ci++) contactMap[allContacts[ci].row] = allContacts[ci];
+
+            if (filteredContacts.length === 0) {
+                document.getElementById('tbl').innerHTML =
+                    '<div class="table-wrap"><div class="sbox"><p>No contacts found</p><small>Try adjusting your search or filter.</small><br><br>' +
+                    '<button class="btn btn-default btn-sm" onclick="clearAll()">Clear filters</button></div></div>';
+                return;
+            }
+
+            var start = (currentPage - 1) * PAGE_SIZE;
+            var page = filteredContacts.slice(start, start + PAGE_SIZE);
+            var total = filteredContacts.length;
+            var totalPages = Math.ceil(total / PAGE_SIZE);
+            var rows = '';
+
+            for (var i = 0; i < page.length; i++) {
+                var c = page[i];
+                var opts = '';
+                for (var si = 0; si < STATUSES.length; si++) {
+                    opts += '<option value="' + STATUSES[si] + '"' + (c.status === STATUSES[si] ? ' selected' : '') + '>' + STATUSES[si] + '</option>';
+                }
+                var linkCell = c.link
+                    ? '<a href="' + esc(c.link) + '" target="_blank" class="link-ico" title="' + esc(c.link) + '">&#8599;</a>'
+                    : '<span style="color:var(--text-3)">&#8212;</span>';
+                var srcCell = c.source
+                    ? '<span class="src-pill">' + esc(c.source) + '</span>'
+                    : '<span style="color:var(--text-3)">&#8212;</span>';
+                var locCell = c.location
+                    ? '<span class="loc-pill"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + esc(c.location) + '</span>'
+                    : '<span style="color:var(--text-3)">&#8212;</span>';
+                var isChecked = selectedRows.has(c.row);
+
+                rows +=
+                    '<tr>' +
+                    '<td data-label="CB"><input type="checkbox" class="row-cb" ' + (isChecked ? 'checked' : '') +
+                    ' onchange="toggleRowSelect(' + c.row + ',this.checked)"></td>' +
+                    '<td data-label="Name"><div class="cname">' + esc(c.name) + '</div><div class="csub">' + esc(c.email || '') + '</div></td>' +
+                    '<td data-label="Company"><div style="font-size:13px">' + (c.company ? esc(c.company) : '<span style="color:var(--text-3)">&#8212;</span>') + '</div><div class="csub">' + esc(c.designation || '') + '</div></td>' +
+                    '<td data-label="Mobile" style="font-size:13px">' + esc(c.mobile || '') + '</td>' +
+                    '<td data-label="Location">' + locCell + '</td>' +
+                    '<td data-label="Status"><select class="status-sel" onchange="updateStatus(' + c.row + ',this.value)">' + opts + '</select></td>' +
+                    '<td data-label="Source">' + srcCell + '</td>' +
+                    '<td data-label="Link">' + linkCell + '</td>' +
+                    '<td data-label="">' +
+                    '<div class="menu-wrap" id="mw-' + c.row + '">' +
+                    '<button class="menu-btn" onclick="toggleMenu(' + c.row + ',event)">' +
+                    '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>' +
+                    '</button>' +
+                    '<div class="dropdown" id="dm-' + c.row + '">' +
+                    '<div class="menu-sec">Contact</div>' +
+                    '<button class="menu-item" onclick="mWA(' + c.row + ')">&#128172;&nbsp; WhatsApp</button>' +
+                    (c.location ? '<button class="menu-item" onclick="mMapLocation(' + c.row + ')">&#128205;&nbsp; View on Map</button>' : '') +
+                    '<div class="menu-divider"></div>' +
+                    '<div class="menu-sec">Remarks</div>' +
+                    '<button class="menu-item" onclick="mAddRemark(' + c.row + ')">&#9998;&nbsp; Add Remark</button>' +
+                    '<button class="menu-item" onclick="mViewRemarks(' + c.row + ')">&#128203;&nbsp; View Remarks</button>' +
+                    '<div class="menu-divider"></div>' +
+                    '<div class="menu-sec">Reminders</div>' +
+                    '<button class="menu-item" onclick="mSetReminder(' + c.row + ')">&#9201;&nbsp; Set Reminder</button>' +
+                    '<button class="menu-item" onclick="mViewReminders(' + c.row + ')">&#128276;&nbsp; View Reminders</button>' +
+                    '<div class="menu-divider"></div>' +
+                    '<div class="menu-sec">Record</div>' +
+                    '<button class="menu-item" onclick="mEdit(' + c.row + ')">&#9999;&nbsp; Edit Contact</button>' +
+                    '<button class="menu-item danger" onclick="mDelete(' + c.row + ')">&#128465;&nbsp; Delete</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>';
+            }
+
+            var pgHTML = '';
+            if (totalPages > 1) {
+                var nums = buildPageNums(currentPage, totalPages);
+                var btns = '';
+                for (var pi = 0; pi < nums.length; pi++) {
+                    var n = nums[pi];
+                    if (n === '...') btns += '<span style="padding:5px 3px;color:var(--text-3)">&#8230;</span>';
+                    else btns += '<button class="pg-btn' + (n === currentPage ? ' cur' : '') + '" onclick="goPage(' + n + ')">' + n + '</button>';
+                }
+                pgHTML = '<div class="pg-bar"><span class="pg-info">Showing ' + (start + 1) + '&#8211;' + Math.min(start + PAGE_SIZE, total) + ' of ' + total + '</span>' +
+                    '<div class="pg-btns"><button class="pg-btn" onclick="goPage(' + (currentPage - 1) + ')"' + (currentPage === 1 ? ' disabled' : '') + '>&#8592; Prev</button>' + btns +
+                    '<button class="pg-btn" onclick="goPage(' + (currentPage + 1) + ')"' + (currentPage === totalPages ? ' disabled' : '') + '>Next &#8594;</button></div></div>';
+            }
+
+            document.getElementById('tbl').innerHTML =
+                '<div class="table-wrap"><table>' +
+                '<thead><tr>' +
+                '<th class="th-check"><input type="checkbox" class="row-cb" id="cbAll" onchange="toggleSelectAll(this.checked)" title="Select all"></th>' +
+                '<th>Name</th><th>Company</th><th>Mobile</th><th>Location</th>' +
+                '<th>Status</th><th>Source</th><th>Link</th><th style="width:44px"></th>' +
+                '</tr></thead>' +
+                '<tbody>' + rows + '</tbody>' +
+                '</table>' + pgHTML + '</div>';
+        }
+
+        function buildPageNums(cur, total) {
+            if (total <= 7) { var a = []; for (var i = 1; i <= total; i++) a.push(i); return a; }
+            if (cur <= 4) return [1, 2, 3, 4, 5, '...', total];
+            if (cur >= total - 3) return [1, '...', total - 4, total - 3, total - 2, total - 1, total];
+            return [1, '...', cur - 1, cur, cur + 1, '...', total];
+        }
+        function goPage(p) {
+            var max = Math.ceil(filteredContacts.length / PAGE_SIZE);
+            if (p >= 1 && p <= max) { currentPage = p; renderTable(); window.scrollTo(0, 0); }
+        }
+
+        // ─── Selection & Route Planning ───────────────────────────────────────────────
+        function toggleRowSelect(row, checked) {
+            if (checked) selectedRows.add(row);
+            else selectedRows.delete(row);
+            updateSelBar();
+        }
+
+        function toggleSelectAll(checked) {
+            var start = (currentPage - 1) * PAGE_SIZE;
+            var page = filteredContacts.slice(start, start + PAGE_SIZE);
+            for (var i = 0; i < page.length; i++) {
+                if (checked) selectedRows.add(page[i].row);
+                else selectedRows.delete(page[i].row);
+            }
+            renderTable();
+            updateSelBar();
+        }
+
+        function clearSelection() {
+            selectedRows.clear();
+            updateSelBar();
+            // Uncheck all checkboxes
+            var cbs = document.querySelectorAll('.row-cb');
+            for (var i = 0; i < cbs.length; i++) cbs[i].checked = false;
+            var cbAll = document.getElementById('cbAll');
+            if (cbAll) cbAll.checked = false;
+        }
+
+        function updateSelBar() {
+            var bar = document.getElementById('selBar');
+            var cnt = selectedRows.size;
+            if (cnt === 0) { bar.classList.remove('show'); return; }
+            bar.classList.add('show');
+            document.getElementById('selCount').textContent = cnt + ' selected';
+            // Check how many have locations
+            var withLoc = 0;
+            selectedRows.forEach(function (row) {
+                var c = contactMap[row];
+                if (c && c.location) withLoc++;
+            });
+            document.getElementById('routeBtn').textContent = withLoc >= 2
+                ? '🗺 Plan Route (' + withLoc + ')'
+                : '🗺 Plan Route';
+            document.getElementById('routeBtn').disabled = withLoc < 2;
+        }
+
+        function planRoute() {
+            var locs = [];
+            selectedRows.forEach(function (row) {
+                var c = contactMap[row];
+                if (c && c.location) locs.push(c.location);
+            });
+            if (locs.length < 2) { toast('Select at least 2 contacts with locations.', true); return; }
+            // Build Google Maps directions URL: /maps/dir/loc1/loc2/loc3
+            var url = 'https://www.google.com/maps/dir/' + locs.map(function (l) { return encodeURIComponent(l); }).join('/');
+            window.open(url, '_blank');
+        }
+
+        // ─── Menu ─────────────────────────────────────────────────────────────────────
+        function toggleMenu(row, e) {
+            e.stopPropagation();
+            var m = document.getElementById('dm-' + row);
+            var wasOpen = m.classList.contains('open');
+            closeMenus();
+            if (!wasOpen) m.classList.add('open');
+        }
+        function closeMenus() {
+            var open = document.querySelectorAll('.dropdown.open');
+            for (var i = 0; i < open.length; i++) open[i].classList.remove('open');
+        }
+        document.addEventListener('click', closeMenus);
+
+        function mWA(row) { closeMenus(); var c = contactMap[row]; if (c) { lastWaRow = row; sendWA(c.mobile, row, c.name); } }
+        function mMapLocation(row) { closeMenus(); var c = contactMap[row]; if (c && c.location) window.open('https://www.google.com/maps/search/' + encodeURIComponent(c.location), '_blank'); }
+        function mAddRemark(row) { closeMenus(); var c = contactMap[row]; if (c) openRemark(row, c.name); }
+        function mViewRemarks(row) { closeMenus(); var c = contactMap[row]; if (c) openViewRemarks(row, c.name); }
+        function mSetReminder(row) { closeMenus(); var c = contactMap[row]; if (c) openSetReminder(row, c.name); }
+        function mViewReminders(row) { closeMenus(); var c = contactMap[row]; if (c) openViewReminders(row, c.name); }
+        function mEdit(row) { closeMenus(); openEdit(row); }
+        function mDelete(row) { closeMenus(); var c = contactMap[row]; if (c) doDelete(row, c.name); }
+
+        // ─── Modals ────────────────────────────────────────────────────────────────────
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+        function openImgPreview(src) { document.getElementById('imgPreviewSrc').src = src; openModal('imgPreviewModal'); }
+        document.addEventListener('click', function (e) {
+            var ids = ['addModal', 'editModal', 'remarkModal', 'viewRemarksModal', 'allRemarksModal',
+                'setReminderModal', 'viewRemindersModal', 'allRemindersModal', 'imgPreviewModal'];
+            for (var i = 0; i < ids.length; i++) {
+                var el = document.getElementById(ids[i]);
+                if (e.target === el) el.classList.remove('open');
+            }
+        });
+
+        // ─── Add Contact ───────────────────────────────────────────────────────────────
+        function openAddModal() {
+            ['a-name', 'a-mobile', 'a-company', 'a-designation', 'a-email', 'a-link', 'a-location'].forEach(function (id) { document.getElementById(id).value = ''; });
+            document.getElementById('a-status').value = 'New';
+            document.getElementById('a-source').value = '';
+            openModal('addModal');
+        }
+        function addContact() {
+            var name = document.getElementById('a-name').value.trim();
+            if (!name) { toast('Name is required.', true); return; }
+            var mobile = document.getElementById('a-mobile').value.trim();
+            var btn = document.querySelector('#addModal .btn-primary');
+            gas('addNewContact', [{
+                name, mobile,
+                company: document.getElementById('a-company').value,
+                designation: document.getElementById('a-designation').value,
+                email: document.getElementById('a-email').value,
+                status: document.getElementById('a-status').value,
+                source: document.getElementById('a-source').value,
+                location: document.getElementById('a-location').value,
+                link: document.getElementById('a-link').value
+            }], function () { closeModal('addModal'); toast('Contact added'); loadData(); }, null, 'Adding contact', btn);
+        }
+
+        // ─── Edit Contact ──────────────────────────────────────────────────────────────
+        function openEdit(row) {
+            var c = null;
+            for (var i = 0; i < allContacts.length; i++) { if (allContacts[i].row === row) { c = allContacts[i]; break; } }
+            if (!c) return;
+            document.getElementById('e-row').value = row;
+            document.getElementById('e-name').value = c.name || '';
+            document.getElementById('e-mobile').value = c.mobile || '';
+            document.getElementById('e-company').value = c.company || '';
+            document.getElementById('e-designation').value = c.designation || '';
+            document.getElementById('e-email').value = c.email || '';
+            document.getElementById('e-status').value = c.status || 'New';
+            document.getElementById('e-source').value = c.source || '';
+            document.getElementById('e-location').value = c.location || '';
+            document.getElementById('e-link').value = c.link || '';
+            openModal('editModal');
+        }
+        function updateContact() {
+            var name = document.getElementById('e-name').value.trim();
+            if (!name) { toast('Name is required.', true); return; }
+            var row = parseInt(document.getElementById('e-row').value);
+            var c = null;
+            for (var i = 0; i < allContacts.length; i++) { if (allContacts[i].row === row) { c = allContacts[i]; break; } }
+            var mobile = document.getElementById('e-mobile').value.trim();
+            var company = document.getElementById('e-company').value;
+            var designation = document.getElementById('e-designation').value;
+            var email = document.getElementById('e-email').value;
+            var status = document.getElementById('e-status').value;
+            var source = document.getElementById('e-source').value;
+            var location = document.getElementById('e-location').value;
+            var link = document.getElementById('e-link').value;
+            var changes = [];
+            if (c) {
+                if (c.name !== name) changes.push('Name: ' + c.name + ' → ' + name);
+                if (c.mobile !== mobile) changes.push('Mobile: ' + c.mobile + ' → ' + mobile);
+                if (c.company !== company) changes.push('Company: ' + c.company + ' → ' + company);
+                if (c.designation !== designation) changes.push('Designation: ' + c.designation + ' → ' + designation);
+                if (c.email !== email) changes.push('Email: ' + c.email + ' → ' + email);
+                if (c.status !== status) changes.push('Status: ' + c.status + ' → ' + status);
+                if (c.source !== source) changes.push('Source: ' + c.source + ' → ' + source);
+                if (c.location !== location) changes.push('Location: ' + c.location + ' → ' + location);
+                if (c.link !== link) changes.push('Link: ' + c.link + ' → ' + link);
+            }
+            var remark = changes.length > 0 ? 'Updated: ' + changes.join(', ') : '';
+            var btn = document.querySelector('#editModal .btn-primary');
+            function onUpdate() {
+                if (remark) {
+                    gas('addRemark', [row, name, remark], function () { closeModal('editModal'); toast('Contact updated'); loadData(); }, null, 'Adding remark');
+                } else {
+                    closeModal('editModal'); toast('Contact updated'); loadData();
+                }
+            }
+            gas('updateContactDetails', [{ row: row, name, mobile, company, designation, email, status, source, location, link }], onUpdate, null, 'Updating contact', btn);
+        }
+        function updateStatus(row, status) {
+            var c = null;
+            for (var i = 0; i < allContacts.length; i++) { if (allContacts[i].row === row) { c = allContacts[i]; break; } }
+            var oldStatus = c ? c.status : '';
+            gas('updateContactStatus', [row, status], function () {
+                if (oldStatus && oldStatus !== status) {
+                    gas('addRemark', [row, c.name, 'Status changed: ' + oldStatus + ' → ' + status], function () { toast('Status updated'); loadData(); }, null, 'Adding remark');
+                } else {
+                    toast('Status updated'); loadData();
+                }
+            }, null, 'Updating status');
+        }
+        function doDelete(row, name) {
+            if (!confirm('Delete "' + name + '"?\n\nThis cannot be undone.')) return;
+            gas('deleteContact', [row], function () { toast('Contact deleted'); loadData(); }, null, 'Deleting contact');
+        }
+        function sendWA(mobile, row, name) {
+            var n = mobile.replace(/[^0-9]/g, '');
+            if (n.length === 10) n = '91' + n;
+            var waUrl = 'https://wa.me/' + n + '?text=' + encodeURIComponent('Hi');
+            window.open(waUrl, '_blank');
+            gas('addRemark', [row, name, 'Whatsapp Message sent'], function () { toast('Whatsapp Message sent'); }, null, 'Adding remark');
+        }
+
+        // ─── Remarks ───────────────────────────────────────────────────────────────────
+        function openRemark(row, name) {
+            document.getElementById('r-row').value = row;
+            document.getElementById('r-name').value = name;
+            document.getElementById('r-display').textContent = name;
+            document.getElementById('r-text').value = '';
+            document.getElementById('r-image').value = '';
+            openModal('remarkModal');
+        }
+        function submitRemark() {
+            var text = document.getElementById('r-text').value.trim();
+            if (!text) { toast('Remark cannot be empty.', true); return; }
+            var fileInput = document.getElementById('r-image');
+            var imageData = '';
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imageData = e.target.result;
+                    doSubmitRemark(text, imageData);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                doSubmitRemark(text, imageData);
+            }
+        }
+        function doSubmitRemark(text, imageData) {
+            var btn = document.querySelector('#remarkModal .btn-primary');
+            gas('addRemark', [parseInt(document.getElementById('r-row').value), document.getElementById('r-name').value, text, imageData],
+                function () { closeModal('remarkModal'); toast('Remark saved'); }, null, 'Saving remark', btn);
+        }
+        function openViewRemarks(row, name) {
+            document.getElementById('vr-name').textContent = name;
+            document.getElementById('vrList').innerHTML = '<div class="sbox" style="padding:30px"><div class="spin"></div><p>Loading…</p></div>';
+            openModal('viewRemarksModal');
+            gas('getRemarks', [row], function (list) {
+                if (!list || list.length === 0) { document.getElementById('vrList').innerHTML = '<div class="sbox" style="padding:30px"><p>No remarks yet</p></div>'; return; }
+                var html = '<div class="rlist">';
+                for (var i = 0; i < list.length; i++) {
+                    var r = list[i]; var d = new Date(r.dateTime);
+                    var fmt = d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    var imgHtml = r.image ? '<img src="' + esc(r.image) + '" style="max-width:100%;max-height:200px;border-radius:6px;margin-top:8px;cursor:pointer" onclick="openImgPreview(\'' + esc(r.image).replace(/'/g, "\\'") + '\')">' : '';
+                    html += '<div class="rcard"><div class="rtext">' + esc(r.remark) + '</div>' + imgHtml + '<div class="rdate">' + fmt + '</div></div>';
+                }
+                html += '</div>';
+                document.getElementById('vrList').innerHTML = html;
+            });
+        }
+        function openAllRemarks() {
+            document.getElementById('arSearch').value = '';
+            openModal('allRemarksModal');
+            loadAllRemarks();
+        }
+        function loadAllRemarks() {
+            document.getElementById('arMeta').textContent = 'Loading…';
+            document.getElementById('arList').innerHTML = '<div class="sbox" style="padding:40px"><div class="spin"></div><p>Fetching remarks…</p></div>';
+            gas('getAllRemarks', [], function (list) {
+                allRemarksCache = list || [];
+                renderAllRemarks(allRemarksCache);
+            });
+        }
+        function filterAllRemarks() {
+            var q = document.getElementById('arSearch').value.toLowerCase().trim();
+            if (!q) { renderAllRemarks(allRemarksCache); return; }
+            renderAllRemarks(allRemarksCache.filter(function (r) {
+                return (r.contactName && r.contactName.toLowerCase().indexOf(q) >= 0) || (r.remark && r.remark.toLowerCase().indexOf(q) >= 0);
+            }));
+        }
+        function renderAllRemarks(list) {
+            var meta = document.getElementById('arMeta'), cont = document.getElementById('arList');
+            if (!list || list.length === 0) {
+                meta.textContent = '0 remarks';
+                cont.innerHTML = '<div class="sbox" style="padding:40px"><p>No remarks found</p></div>';
+                return;
+            }
+            meta.textContent = list.length + (list.length === 1 ? ' remark' : ' remarks') + ' - newest first';
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+                var r = list[i]; var d = new Date(r.dateTime);
+                var fmt = d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                var imgHtml = r.image ? '<img src="' + esc(r.image) + '" style="max-width:100%;max-height:200px;border-radius:6px;margin-top:8px;cursor:pointer" onclick="openImgPreview(\'' + esc(r.image).replace(/'/g, "\\'") + '\')">' : '';
+                html += '<div class="rcard"><div class="rcard-hd"><span class="rtag">&#128100; ' + esc(r.contactName || '') + '</span><span class="rago">' + timeAgo(d) + '</span></div><div class="rtext">' + esc(r.remark || '') + '</div>' + imgHtml + '<div class="rdate">&#128197; ' + fmt + '</div></div>';
+            }
+            cont.innerHTML = html;
+        }
+
+        // ─── Reminders ─────────────────────────────────────────────────────────────────
+        function selectReminderType(type) {
+            document.getElementById('rem-type').value = type;
+            document.getElementById('type-phone-btn').className = 'type-btn' + (type === 'Phone' ? ' selected-phone' : '');
+            document.getElementById('type-meeting-btn').className = 'type-btn' + (type === 'Meeting' ? ' selected-meeting' : '');
+        }
+        function openSetReminder(row, name) {
+            document.getElementById('rem-row').value = row;
+            document.getElementById('rem-contact-name').value = name;
+            document.getElementById('rem-contact-display').textContent = 'For: ' + name;
+            document.getElementById('rem-agenda').value = '';
+            document.getElementById('rem-time').value = '';
+            var today = new Date();
+            document.getElementById('rem-date').value = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+            selectReminderType('Phone');
+            openModal('setReminderModal');
+        }
+        function submitReminder() {
+            var date = document.getElementById('rem-date').value;
+            var time = document.getElementById('rem-time').value;
+            var agenda = document.getElementById('rem-agenda').value.trim();
+            if (!date || !time || !agenda) { toast('Date, Time and Agenda are required.', true); return; }
+            var row = parseInt(document.getElementById('rem-row').value);
+            var name = document.getElementById('rem-contact-name').value;
+            var type = document.getElementById('rem-type').value;
+            var btn = document.querySelector('#setReminderModal .btn-primary');
+            var remark = 'Reminder set (' + type + '): ' + date + ' ' + time + ' - ' + agenda;
+            gas('addRemark', [row, name, remark], function () {
+                gas('addReminder', [{
+                    contactRow: row,
+                    contactName: name,
+                    type: type,
+                    date: date,
+                    time: time,
+                    agenda: agenda,
+                    status: 'Pending'
+                }], function () { closeModal('setReminderModal'); toast('Reminder set ✓'); refreshReminderBadge(); }, null, 'Setting reminder', btn);
+            }, null, 'Adding remark');
+        }
+        function openViewReminders(row, name) {
+            document.getElementById('vrem-name').textContent = name;
+            document.getElementById('vremList').innerHTML = '<div class="sbox" style="padding:30px"><div class="spin"></div><p>Loading…</p></div>';
+            openModal('viewRemindersModal');
+            gas('getRemindersForContact', [row], function (list) {
+                document.getElementById('vremList').innerHTML = renderReminderCards(list, true);
+            });
+        }
+        function openAllReminders() {
+            document.getElementById('remSearch').value = '';
+            currentReminderTab = 'upcoming';
+            updateTabUI();
+            openModal('allRemindersModal');
+            loadAllReminders();
+        }
+        function loadAllReminders() {
+            document.getElementById('remMeta').textContent = 'Loading…';
+            document.getElementById('remList').innerHTML = '<div class="sbox" style="padding:40px"><div class="spin"></div><p>Fetching…</p></div>';
+            gas('getAllReminders', [], function (list) {
+                allRemindersCache = list || [];
+                filterRemindersDisplay();
+                refreshReminderBadge();
+            });
+        }
+        function switchReminderTab(tab) { currentReminderTab = tab; updateTabUI(); filterRemindersDisplay(); }
+        function updateTabUI() {
+            var tabs = ['upcoming', 'all-rem', 'completed', 'cancelled'];
+            var names = ['upcoming', 'all', 'completed', 'cancelled'];
+            for (var i = 0; i < tabs.length; i++) {
+                var el = document.getElementById('tab-' + tabs[i]);
+                if (el) el.classList.toggle('active', names[i] === currentReminderTab);
+            }
+        }
+        function filterRemindersDisplay() {
+            var q = document.getElementById('remSearch').value.toLowerCase().trim();
+            var list = allRemindersCache.slice();
+            if (currentReminderTab === 'upcoming') list = list.filter(function (r) { return r.status !== 'Completed' && r.status !== 'Cancelled'; });
+            else if (currentReminderTab === 'completed') list = list.filter(function (r) { return r.status === 'Completed'; });
+            else if (currentReminderTab === 'cancelled') list = list.filter(function (r) { return r.status === 'Cancelled'; });
+            if (q) list = list.filter(function (r) {
+                return (r.contactName && r.contactName.toLowerCase().indexOf(q) >= 0) || (r.agenda && r.agenda.toLowerCase().indexOf(q) >= 0);
+            });
+            var meta = document.getElementById('remMeta');
+            meta.textContent = list.length + ' reminder' + (list.length !== 1 ? 's' : '') + (currentReminderTab === 'upcoming' ? ' pending' : currentReminderTab === 'completed' ? ' completed' : currentReminderTab === 'cancelled' ? ' cancelled' : ' total');
+            document.getElementById('remList').innerHTML = renderReminderCards(list, false);
+        }
+        function renderReminderCards(list, singleContact) {
+            if (!list || list.length === 0) {
+                return '<div class="rem-empty"><div class="rem-empty-icon">🔔</div><p>No reminders found</p><small>Set a reminder via the ⋮ menu on any contact.</small></div>';
+            }
+            var html = '<div class="reminder-list">';
+            for (var i = 0; i < list.length; i++) {
+                var r = list[i];
+                var typeKey = (r.type || 'Phone').toLowerCase();
+                var isDone = r.status === 'Completed' || r.status === 'Cancelled';
+                var isCancelled = r.status === 'Cancelled';
+                var over = isOverdue(r.date, r.time, r.status);
+                var typeIcon = typeKey === 'meeting' ? '🤝' : '📞';
+                var typePill = '<span class="rem-type-pill ' + typeKey + '">' + typeIcon + ' ' + esc(r.type || 'Phone') + '</span>';
+                var statusPill = r.status === 'Cancelled' ? '<span class="rem-status-pill completed" style="background:#fee2e2;color:#dc2626">❌ Cancelled</span>' : isDone ? '<span class="rem-status-pill completed">✅ Completed</span>' : over ? '<span class="rem-status-pill pending"><span class="overdue-dot"></span>Overdue</span>' : '<span class="rem-status-pill pending">⏰ Pending</span>';
+                var contactBit = singleContact ? '' : '<div class="rem-contact">👤 ' + esc(r.contactName || '') + '</div>';
+                var dateLabel = fmtDateOnly(r.date) + ' at ' + (r.time || '');
+                var actionBtns = '';
+                if (!isDone) actionBtns += '<button class="rem-btn complete-btn" onclick="markReminderDone(' + r.id + ', ' + r.contactRow + ', \'' + esc(r.contactName || '').replace(/'/g, "\\'") + '\', \'' + esc(r.type || '').replace(/'/g, "\\'") + '\', \'' + esc(r.date || '').replace(/'/g, "\\'") + '\', \'' + esc(r.time || '').replace(/'/g, "\\'") + '\', \'' + esc(r.agenda || '').replace(/'/g, "\\'") + '\')">✅ Mark Complete</button>';
+                if (!isDone) actionBtns += '<button class="rem-btn" onclick="markReminderCancelled(' + r.id + ', ' + r.contactRow + ', \'' + esc(r.contactName || '').replace(/'/g, "\\'") + '\', \'' + esc(r.type || '').replace(/'/g, "\\'") + '\', \'' + esc(r.date || '').replace(/'/g, "\\'") + '\', \'' + esc(r.time || '').replace(/'/g, "\\'") + '\', \'' + esc(r.agenda || '').replace(/'/g, "\\'") + '\')">❌ Cancel</button>';
+                if (!isDone) actionBtns += '<button class="rem-btn danger-btn" onclick="deleteReminder(' + r.id + ')">🗑 Delete</button>';
+                html += '<div class="rem-card type-' + typeKey + (isDone ? ' status-completed' : '') + '"><div class="rem-card-hd"><div>' + contactBit + '</div><div class="rem-badges">' + typePill + statusPill + '</div></div><div class="rem-datetime">📅 ' + esc(dateLabel) + '</div><div class="rem-agenda">' + esc(r.agenda || '') + '</div><div class="rem-actions">' + actionBtns + '</div></div>';
+            }
+            html += '</div>';
+            return html;
+        }
+        function markReminderDone(id, contactRow, contactName, type, date, time, agenda) {
+            var remark = 'Reminder completed (' + type + '): ' + date + ' ' + time + ' - ' + agenda;
+            gas('addRemark', [contactRow, contactName, remark], function () {
+                gas('updateReminderStatus', [id, 'Completed'], function () { toast('Marked as completed'); loadAllReminders(); }, null, 'Updating reminder');
+            }, null, 'Adding remark');
+        }
+        function markReminderCancelled(id, contactRow, contactName, type, date, time, agenda) {
+            var remark = 'Meeting cancelled (' + type + '): ' + date + ' ' + time + ' - ' + agenda;
+            gas('addRemark', [contactRow, contactName, remark], function () {
+                gas('updateReminderStatus', [id, 'Cancelled'], function () { toast('Marked as cancelled'); loadAllReminders(); }, null, 'Updating reminder');
+            }, null, 'Adding remark');
+        }
+        function deleteReminder(id) {
+            if (!confirm('Delete this reminder?\nThis cannot be undone.')) return;
+            gas('deleteReminder', [id], function () { toast('Reminder deleted'); loadAllReminders(); }, null, 'Deleting reminder');
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+
+</html>
