@@ -1399,6 +1399,22 @@
           }
         }
 
+        // Step 4: Slack Notification via API
+        fetch('/api/notify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: `🆕 *New Inquiry from Piplhr Website*\n\n` +
+                  `• *Name:* ${name}\n` +
+                  `• *Phone:* ${phone}\n` +
+                  `• *Email:* ${email}\n` +
+                  `• *City:* ${city}\n` +
+                  `• *Timeline:* ${timeline?.value || 'N/A'}\n\n` +
+                  `• *Problem:* ${problem}\n` +
+                  (triedAll.length > 0 ? `• *Tried:* ${triedAll.join(', ')}` : '')
+          })
+        }).catch(console.error);
+
         // Show success
         document.getElementById('main-form').style.display = 'none';
         document.getElementById('success-overlay').style.display = 'block';
